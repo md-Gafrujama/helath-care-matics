@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import BrandLogo from "@/components/BrandLogo";
 import { signOut } from "@/lib/actions/auth";
 
 const LINKS = [
@@ -9,6 +10,7 @@ const LINKS = [
     href: "/admin",
     label: "Dashboard",
     exact: true,
+    hint: "Overview & activity",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <rect x="3" y="3" width="8" height="8" rx="1.5" />
@@ -21,6 +23,7 @@ const LINKS = [
   {
     href: "/admin/articles",
     label: "Articles",
+    hint: "Drafts & published",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path d="M6 4h9l5 5v11a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" />
@@ -31,15 +34,18 @@ const LINKS = [
   {
     href: "/admin/topics",
     label: "Topics",
+    hint: "Navbar categories",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <path d="M4 7h16M4 12h16M4 17h10" />
+        <circle cx="12" cy="12" r="3" />
+        <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4l1.4-1.4M17 7l1.4-1.4" />
       </svg>
     ),
   },
   {
     href: "/admin/subscribers",
     label: "Subscribers",
+    hint: "Newsletter list",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path d="M4 6h16v12H4z" />
@@ -49,15 +55,21 @@ const LINKS = [
   },
 ] as const;
 
-export default function AdminSidebar({ email }: { email: string | undefined }) {
+export default function AdminSidebar({
+  email,
+  onNavigate,
+}: {
+  email: string | undefined;
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
   const initial = (email?.[0] ?? "A").toUpperCase();
 
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar-head">
-        <span className="admin-sidebar-kicker">HealthMatics</span>
-        <strong>Control center</strong>
+        <BrandLogo variant="onDark" href="/admin" className="admin-sidebar-brand" />
+        <p className="admin-sidebar-kicker">Editorial control center</p>
       </div>
 
       <nav className="admin-sidebar-nav" aria-label="Admin">
@@ -73,32 +85,42 @@ export default function AdminSidebar({ email }: { email: string | undefined }) {
               href={link.href}
               className={active ? "active" : undefined}
               aria-current={active ? "page" : undefined}
+              onClick={onNavigate}
             >
               <span className="admin-nav-icon" aria-hidden>
                 {link.icon}
               </span>
-              {link.label}
+              <span className="admin-nav-copy">
+                <span className="admin-nav-title">{link.label}</span>
+                <span className="admin-nav-hint">{link.hint}</span>
+              </span>
             </Link>
           );
         })}
 
         <p className="admin-nav-label">Shortcuts</p>
-        <Link href="/admin/articles/new#generate">
+        <Link href="/admin/articles/new#generate" onClick={onNavigate}>
           <span className="admin-nav-icon" aria-hidden>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
               <path d="M12 5v14M5 12h14" />
             </svg>
           </span>
-          New article
+          <span className="admin-nav-copy">
+            <span className="admin-nav-title">New article</span>
+            <span className="admin-nav-hint">AI or manual</span>
+          </span>
         </Link>
-        <Link href="/">
+        <Link href="/" onClick={onNavigate} target="_blank" rel="noopener noreferrer">
           <span className="admin-nav-icon" aria-hidden>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
               <path d="M4 11l8-7 8 7" />
               <path d="M6 10v9h12v-9" />
             </svg>
           </span>
-          View public site
+          <span className="admin-nav-copy">
+            <span className="admin-nav-title">Public site</span>
+            <span className="admin-nav-hint">Open homepage</span>
+          </span>
         </Link>
       </nav>
 
@@ -107,7 +129,7 @@ export default function AdminSidebar({ email }: { email: string | undefined }) {
           <span className="admin-user-avatar" aria-hidden>
             {initial}
           </span>
-          <div>
+          <div className="admin-user-meta">
             <span className="admin-user-role">Administrator</span>
             {email && <p className="admin-sidebar-email">{email}</p>}
           </div>

@@ -43,7 +43,7 @@ const RESOURCES = [
   {
     type: "Whitepaper",
     title: "A practical framework for healthcare data governance",
-    dek: "What a governed people-data layer looks like — and how to build one incrementally.",
+    dek: "What a governed people-data layer looks like, and how to build one incrementally.",
     spon: "HealthMatics Research",
   },
 ] as const;
@@ -57,7 +57,7 @@ export default function Page() {
           <span className="kicker k">Resource Library</span>
           <h1>Research, guides &amp; tools for healthcare leaders</h1>
           <p>
-            In-depth reports, playbooks, and on-demand sessions — produced by
+            In-depth reports, playbooks, and on-demand sessions, produced by
             the HealthMatics editorial studio and our partners. Free with a quick
             registration.
           </p>

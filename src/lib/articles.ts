@@ -11,7 +11,7 @@ function sanitizeArticle(article: ArticleWithTopic): ArticleWithTopic {
   return normalizeDashesDeep(article);
 }
 
-/** Only healthcare navbar topics — drops legacy CFO-era rows if any remain in the DB. */
+/** Only healthcare navbar topics, drops legacy CFO-era rows if any remain in the DB. */
 function isHrArticle(article: ArticleWithTopic): boolean {
   return Boolean(article.topic?.slug && HR_TOPIC_SLUGS.has(article.topic.slug));
 }

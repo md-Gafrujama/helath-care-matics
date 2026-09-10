@@ -20,7 +20,7 @@ export const HR_TOPICS: TopicConfig[] = [
     crumb: "Health IT",
     edition: "Health IT Weekly",
     description:
-      "Interoperability, EHR modernization, and enterprise AI — covered for the leaders making technology decisions that reshape how care is delivered.",
+      "Interoperability, EHR modernization, and enterprise AI, covered for the leaders making technology decisions that reshape how care is delivered.",
     chips: [
       "AI in Healthcare",
       "Interoperability",
@@ -39,7 +39,7 @@ export const HR_TOPICS: TopicConfig[] = [
     crumb: "Hospitals",
     edition: "Hospital Executive Brief",
     description:
-      "Operations, M&A, capital planning, and strategy — covered for the executives running hospitals and health systems in a margin-pressured market.",
+      "Operations, M&A, capital planning, and strategy, covered for the executives running hospitals and health systems in a margin-pressured market.",
     chips: [
       "Operations",
       "M&A",
@@ -58,7 +58,7 @@ export const HR_TOPICS: TopicConfig[] = [
     crumb: "Payers",
     edition: "Payer & Insurance Brief",
     description:
-      "Reimbursement, claims automation, value-based contracts, and data sharing — decoded for the teams navigating a tougher payer landscape.",
+      "Reimbursement, claims automation, value-based contracts, and data sharing, decoded for the teams navigating a tougher payer landscape.",
     chips: [
       "Reimbursement",
       "Claims Automation",
@@ -77,7 +77,7 @@ export const HR_TOPICS: TopicConfig[] = [
     crumb: "Digital Health",
     edition: "Digital Health Weekly",
     description:
-      "Virtual care, remote monitoring, and patient engagement — covered for the teams building the next generation of connected health experiences.",
+      "Virtual care, remote monitoring, and patient engagement, covered for the teams building the next generation of connected health experiences.",
     chips: [
       "Telehealth",
       "Remote Monitoring",
@@ -96,7 +96,7 @@ export const HR_TOPICS: TopicConfig[] = [
     crumb: "Cybersecurity",
     edition: "Security Brief",
     description:
-      "Risk, resilience, and regulatory compliance — covered for the leaders protecting healthcare organizations from growing cyber threats.",
+      "Risk, resilience, and regulatory compliance, covered for the leaders protecting healthcare organizations from growing cyber threats.",
     chips: [
       "Risk Management",
       "Compliance",
@@ -115,7 +115,7 @@ export const HR_TOPICS: TopicConfig[] = [
     crumb: "Pharma & Biotech",
     edition: "Pharma Weekly",
     description:
-      "Drug development, commercial strategy, device innovation, and AI in the pipeline — covered for the teams bringing therapies and technologies to market.",
+      "Drug development, commercial strategy, device innovation, and AI in the pipeline, covered for the teams bringing therapies and technologies to market.",
     chips: [
       "Drug Development",
       "Commercial Launch",

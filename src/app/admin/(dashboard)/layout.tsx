@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import AdminSidebar from "@/components/admin/AdminSidebar";
+import SiteHeader from "@/components/SiteHeader";
+import AdminShell from "@/components/admin/AdminShell";
 
 export default async function AdminDashboardLayout({
   children,
@@ -27,9 +28,9 @@ export default async function AdminDashboardLayout({
   }
 
   return (
-    <div className="admin-shell">
-      <AdminSidebar email={user.email} />
-      <main className="admin-main">{children}</main>
+    <div className="admin-layout">
+      <SiteHeader />
+      <AdminShell email={user.email}>{children}</AdminShell>
     </div>
   );
 }

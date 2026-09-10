@@ -5,12 +5,20 @@ import type { ArticleWithTopic } from "@/types/database";
 
 export default function ArticleRelated({
   articles,
+  topicSlug,
+  topicName,
 }: {
   articles: ArticleWithTopic[];
+  topicSlug?: string | null;
+  topicName?: string | null;
 }) {
   if (articles.length === 0) return null;
 
-  const stories = articles.map(articleToStory);
+  const stories = articles.slice(0, 3).map(articleToStory);
+  const allHref = topicSlug ? `/topic/${topicSlug}` : "/";
+  const heading = topicName
+    ? `More in ${topicName}`
+    : "More from HealthMatics";
 
   return (
     <section className="art-related">
@@ -18,9 +26,9 @@ export default function ArticleRelated({
         <header className="art-related-head">
           <div>
             <span className="kicker">Keep reading</span>
-            <h2>More from HealthMatics</h2>
+            <h2>{heading}</h2>
           </div>
-          <Link href="/" className="art-related-more">
+          <Link href={allHref} className="art-related-more">
             All stories →
           </Link>
         </header>

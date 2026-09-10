@@ -7,18 +7,19 @@ export default function StoryCard({ story }: { story: TopicStory }) {
   const href = storyHref(story);
 
   return (
-    <article className="home-story">
-      <Link href={href} className="home-story-media" aria-label={story.title}>
+    <article className="hr-story">
+      <Link href={href} className="hr-story-media" aria-label={story.title}>
         <CoverImage
           src={story.coverImageUrl}
           alt={story.coverImageAlt}
           seed={story.slug}
           label={story.category}
+          sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
         />
       </Link>
-      <div className="home-story-copy">
-        <span className="home-story-meta">
-          {story.topicName} &middot; {story.readMinutes} min read
+      <div className="hr-story-copy">
+        <span className="hr-story-meta">
+          {story.topicName} · {story.readMinutes} min read
         </span>
         <h3>
           <Link href={href}>{story.title}</Link>

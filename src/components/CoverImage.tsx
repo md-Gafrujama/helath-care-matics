@@ -11,9 +11,7 @@ export default function CoverImage({
 }: {
   src: string | null;
   alt: string | null;
-  /** Unique per-article key (slug or id) - drives fallback art. */
   seed: string;
-  /** Optional badge text on fallback art (topic name). */
   label?: string | null;
   sizes?: string;
   priority?: boolean;
@@ -34,6 +32,8 @@ export default function CoverImage({
         fill
         sizes={sizes}
         priority={priority}
+        loading={priority ? "eager" : "lazy"}
+        quality={70}
         style={{ objectFit: "cover" }}
       />
     </div>

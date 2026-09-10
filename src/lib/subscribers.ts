@@ -99,6 +99,72 @@ export async function unsubscribeByToken(token: string): Promise<boolean> {
   return Boolean(data);
 }
 
+export type UnsubscribeByEmailResult =
+  | { ok: true; already?: boolean }
+  | { ok: false; error: string };
+
+/** Public form unsubscribe, email must already be on the list. */
+export async function unsubscribeByEmail(
+  rawEmail: string,
+  reason?: string | null,
+): Promise<UnsubscribeByEmailResult> {
+  const email = normalizeEmail(rawEmail);
+  if (!EMAIL_RE.test(email) || email.length > 254) {
+    return { ok: false, error: "Enter a valid email address" };
+  }
+
+  const admin = createAdminClient();
+  const { data: existing, error: lookupError } = await admin
+    .from("subscribers")
+    .select("id, unsubscribed_at")
+    .eq("email", email)
+    .maybeSingle();
+
+  if (lookupError) {
+    return { ok: false, error: lookupError.message };
+  }
+  if (!existing) {
+    return {
+      ok: false,
+      error: "We could not find that email on the HealthMatics list.",
+    };
+  }
+  if (existing.unsubscribed_at) {
+    return { ok: true, already: true };
+  }
+
+  const unsubscribedAt = new Date().toISOString();
+  const trimmedReason = reason?.trim()?.slice(0, 280) || null;
+
+  let { error } = await admin
+    .from("subscribers")
+    .update(
+      trimmedReason
+        ? {
+            unsubscribed_at: unsubscribedAt,
+            unsubscribe_reason: trimmedReason,
+          }
+        : { unsubscribed_at: unsubscribedAt },
+    )
+    .eq("id", existing.id);
+
+  // Column may not exist yet, retry without reason.
+  if (error && trimmedReason && /unsubscribe_reason/i.test(error.message)) {
+    const retry = await admin
+      .from("subscribers")
+      .update({ unsubscribed_at: unsubscribedAt })
+      .eq("id", existing.id);
+    error = retry.error;
+  }
+
+  if (error) {
+    console.error("unsubscribeByEmail failed:", error.message);
+    return { ok: false, error: "Could not unsubscribe. Try again." };
+  }
+
+  return { ok: true };
+}
+
 export async function notifySubscribersOfArticle(articleId: string) {
   try {
     await notifySubscribersOfArticleInner(articleId);

@@ -13,7 +13,6 @@ import { getArticleToc } from "@/lib/article-toc";
 import {
   getArticleBySlug,
   getArticlesByTopicSlug,
-  getLatestArticles,
 } from "@/lib/articles";
 import { parseKeywordList, hydrateArticleSeo } from "@/lib/seo";
 import { getSiteUrl } from "@/lib/site";
@@ -94,14 +93,11 @@ export default async function ArticlePage({
   const article = await getArticleBySlug(slug);
   if (!article) notFound();
 
-  const [related, latest] = await Promise.all([
-    article.topic
-      ? getArticlesByTopicSlug(article.topic.slug, 5).then((rows) =>
-          rows.filter((a) => a.id !== article.id),
-        )
-      : Promise.resolve([]),
-    getLatestArticles(6),
-  ]);
+  const related = article.topic
+    ? (
+        await getArticlesByTopicSlug(article.topic.slug, 8)
+      ).filter((a) => a.id !== article.id)
+    : [];
 
   const moreInTopic = related.slice(0, 4);
   const siteUrl = getSiteUrl();
@@ -205,15 +201,17 @@ export default async function ArticlePage({
                     <span className="art-avatar" aria-hidden>
                       {article.author_name.charAt(0)}
                     </span>
-                    <div>
-                      <strong>{article.author_name}</strong>
-                      <span>
-                        {formatDateLong(article.published_at)}
+                    <div className="art-author-copy">
+                      <strong className="art-author-name">{article.author_name}</strong>
+                      <div className="art-author-meta">
+                        <time dateTime={article.published_at ?? undefined}>
+                          {formatDateLong(article.published_at)}
+                        </time>
                         <span className="art-dot" aria-hidden>
                           ·
                         </span>
-                        {article.read_time_minutes ?? 5} min read
-                      </span>
+                        <span>{article.read_time_minutes ?? 5} min read</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -284,7 +282,9 @@ export default async function ArticlePage({
       </article>
 
       <ArticleRelated
-        articles={latest.filter((a) => a.id !== article.id).slice(0, 3)}
+        articles={related.slice(0, 3)}
+        topicSlug={article.topic?.slug}
+        topicName={article.topic?.name}
       />
       <SiteFooter />
     </>

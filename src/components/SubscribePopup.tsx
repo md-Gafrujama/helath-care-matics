@@ -29,7 +29,6 @@ export default function SubscribePopup({
     if (typeof window === "undefined") return;
     if (window.localStorage.getItem(SUBSCRIBED_KEY) === "1") return;
 
-    // Let readers start the article first; avoid blocking the first viewport.
     const timer = window.setTimeout(() => setOpen(true), 8000);
     return () => window.clearTimeout(timer);
   }, []);
@@ -72,10 +71,10 @@ export default function SubscribePopup({
       try {
         window.localStorage.setItem(SUBSCRIBED_KEY, "1");
       } catch {
-        // ignore quota / private mode
+        // ignore
       }
       setDone(true);
-      window.setTimeout(() => setOpen(false), 1400);
+      window.setTimeout(() => setOpen(false), 1600);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not subscribe");
     } finally {
@@ -110,47 +109,68 @@ export default function SubscribePopup({
           </svg>
         </button>
 
-        <p className="subpop-kicker">The Brief</p>
-        <h2 id={titleId}>
-          {done ? "You’re in" : "Get the daily healthcare brief"}
-        </h2>
-        <p className="subpop-copy">
-          {done
-            ? "Watch your inbox — the next brief is on the way."
-            : "Concise healthcare news and analysis for busy decision makers. Free, every weekday."}
-        </p>
+        <div className="subpop-grid">
+          <aside className="subpop-aside">
+            <span className="subpop-mark" aria-hidden>
+              H
+            </span>
+            <p className="subpop-aside-kicker">HealthMatics Brief</p>
+            <h3>Stay ahead of healthcare&apos;s next move</h3>
+            <ul className="subpop-perks">
+              <li>Daily curated news</li>
+              <li>Executive-ready analysis</li>
+              <li>Free, unsubscribe anytime</li>
+            </ul>
+          </aside>
 
-        {!done ? (
-          <form className="subpop-form" onSubmit={onSubmit}>
-            <label htmlFor="article-sub-email" className="sr-only">
-              Work email
-            </label>
-            <input
-              ref={inputRef}
-              id="article-sub-email"
-              type="email"
-              name="email"
-              placeholder="Work email"
-              required
-              autoComplete="email"
-              disabled={pending}
-            />
-            <button type="submit" className="subpop-btn" disabled={pending}>
-              {pending ? "Saving…" : "Subscribe free"}
-            </button>
-          </form>
-        ) : (
-          <div className="subpop-success" aria-live="polite">
-            <span className="subpop-check" aria-hidden>✓</span>
-            Subscribed
+          <div className="subpop-body">
+            <p className="subpop-kicker">Subscribe free</p>
+            <h2 id={titleId}>
+              {done ? "You’re subscribed" : "Get the daily brief"}
+            </h2>
+            <p className="subpop-copy">
+              {done
+                ? "Thanks, watch your inbox for the next HealthMatics brief."
+                : articleTitle
+                  ? "Reading this story? Get the next one delivered before it hits the homepage."
+                  : "Concise healthcare news and analysis for busy decision makers."}
+            </p>
+
+            {!done ? (
+              <form className="subpop-form" onSubmit={onSubmit}>
+                <label htmlFor="article-sub-email">Work email</label>
+                <input
+                  ref={inputRef}
+                  id="article-sub-email"
+                  type="email"
+                  name="email"
+                  placeholder="you@organization.com"
+                  required
+                  autoComplete="email"
+                  disabled={pending}
+                />
+                <button type="submit" className="subpop-btn" disabled={pending}>
+                  {pending ? "Saving…" : "Subscribe now"}
+                </button>
+              </form>
+            ) : (
+              <div className="subpop-success" aria-live="polite">
+                <span className="subpop-check" aria-hidden>✓</span>
+                You’re on the list
+              </div>
+            )}
+
+            {error ? (
+              <p className="subpop-note subpop-note--error">{error}</p>
+            ) : (
+              !done && (
+                <p className="subpop-note">
+                  No spam. One email on weekdays.
+                </p>
+              )
+            )}
           </div>
-        )}
-
-        {error ? (
-          <p className="subpop-note subpop-note--error">{error}</p>
-        ) : (
-          !done && <p className="subpop-note">Free. Unsubscribe anytime.</p>
-        )}
+        </div>
       </div>
     </div>
   );

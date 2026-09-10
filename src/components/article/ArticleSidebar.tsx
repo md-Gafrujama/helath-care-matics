@@ -78,7 +78,7 @@ export default function ArticleSidebar({
           <h2>The daily brief</h2>
         </div>
         <p className="art-rail-news-copy">
-          Healthcare intelligence in one email — health IT, hospitals, payers,
+          Healthcare intelligence in one email, health IT, hospitals, payers,
           and digital health for decision makers.
         </p>
         <form

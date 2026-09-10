@@ -240,7 +240,7 @@ export default function AiGenerateForm({ topics }: { topics: Topic[] }) {
             disabled={running}
           >
             {newsTopics.length === 0 && (
-              <option value="">No topics yet — run bootstrap first</option>
+              <option value="">No topics yet, run bootstrap first</option>
             )}
             {newsTopics.map((t) => (
               <option key={t.id} value={t.id}>
@@ -275,7 +275,7 @@ export default function AiGenerateForm({ topics }: { topics: Topic[] }) {
           {running ? "Generating…" : "Generate trending story for this topic"}
         </button>
         <span className="field-hint" style={{ marginTop: 8, display: "block" }}>
-          No title needed — Claude picks a fresh angle for the selected navbar
+          No title needed, Claude picks a fresh angle for the selected navbar
           topic.
         </span>
       </div>

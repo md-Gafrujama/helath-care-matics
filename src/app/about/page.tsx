@@ -18,7 +18,7 @@ export default function Page() {
           <h1>Healthcare intelligence for the people shaping what&apos;s next</h1>
           <p style={{ fontSize: 17, color: "var(--ink-soft)", maxWidth: "56ch", marginTop: 12 }}>
             HealthMatics is a digital publication covering the news, technology,
-            and strategy shaping modern healthcare — written for executives,
+            and strategy shaping modern healthcare, written for executives,
             technology leaders, clinicians, and the decision-makers around them.
           </p>
         </div>
@@ -29,9 +29,9 @@ export default function Page() {
           <main className="prose" style={{ maxWidth: "none", fontSize: 17, lineHeight: 1.7, color: "var(--ink-2)" }}>
             <p>
               HealthMatics exists to help healthcare leaders make better
-              decisions with less noise. We cover what actually moves healthcare
-              — health IT, hospital operations, payer strategy, digital health,
-              cybersecurity, and pharma — and we translate complex developments
+              decisions with less noise. We cover what actually moves healthcare:
+              health IT, hospital operations, payer strategy, digital health,
+              cybersecurity, and pharma, and we translate complex developments
               into clear, useful analysis.
             </p>
             <h2 id="standards">Editorial standards</h2>
@@ -52,7 +52,7 @@ export default function Page() {
               HealthMatics reaches healthcare decision-makers actively
               researching the future of care. We help partners connect with that
               audience through sponsored content, custom research, webinars, and
-              lead-generation programs — all produced to editorial standard and
+              lead-generation programs, all produced to editorial standard and
               delivered with clear consent.
             </p>
             <h2 id="contact">Contact</h2>

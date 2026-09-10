@@ -1,26 +1,34 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Newsreader } from "next/font/google";
 import ClientEffects from "@/components/ClientEffects";
-import SubscribeModal, { Toast } from "@/components/SubscribeModal";
+import SiteChrome from "@/components/SiteChrome";
 import JsonLd from "@/components/JsonLd";
 import { getSiteUrl } from "@/lib/site";
 import "./globals.css";
 
 const SITE_URL = getSiteUrl();
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600", "700"],
   display: "swap",
+  preload: true,
 });
 
 const newsreader = Newsreader({
   variable: "--font-serif",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["500", "600", "700"],
   style: ["normal", "italic"],
   display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -44,11 +52,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/icon", type: "image/png", sizes: "32x32" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon.ico", sizes: "any" },
     ],
-    apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
   openGraph: {
     type: "website",
@@ -74,6 +84,7 @@ export default function RootLayout({
             "@type": "Organization",
             name: "HealthMatics",
             url: SITE_URL,
+            logo: `${SITE_URL}/brand/mark.svg`,
           }}
         />
         <JsonLd
@@ -91,8 +102,7 @@ export default function RootLayout({
         />
         {children}
         <ClientEffects />
-        <SubscribeModal />
-        <Toast />
+        <SiteChrome />
       </body>
     </html>
   );

@@ -196,12 +196,12 @@ create policy "subscriber_notifications_admin_all" on public.subscriber_notifica
 -- Seed Healthcare topic categories (no-op if already present)
 -- ---------------------------------------------------------------------------
 insert into public.topics (slug, name, description) values
-  ('health-it', 'Health IT', 'Interoperability, EHR modernization, and enterprise AI — covered for the leaders making technology decisions that reshape how care is delivered.'),
-  ('hospitals', 'Hospitals & Health Systems', 'Operations, M&A, capital planning, and strategy — covered for the executives running hospitals and health systems in a margin-pressured market.'),
-  ('payers', 'Payers & Insurance', 'Reimbursement, claims automation, value-based contracts, and data sharing — decoded for the teams navigating a tougher payer landscape.'),
-  ('digital-health', 'Digital Health', 'Virtual care, remote monitoring, and patient engagement — covered for the teams building the next generation of connected health experiences.'),
-  ('cybersecurity', 'Cybersecurity', 'Risk, resilience, and regulatory compliance — covered for the leaders protecting healthcare organizations from growing cyber threats.'),
-  ('pharma-biotech', 'Pharma & Biotech', 'Drug development, commercial strategy, device innovation, and AI in the pipeline — covered for the teams bringing therapies and technologies to market.')
+  ('health-it', 'Health IT', 'Interoperability, EHR modernization, and enterprise AI, covered for the leaders making technology decisions that reshape how care is delivered.'),
+  ('hospitals', 'Hospitals & Health Systems', 'Operations, M&A, capital planning, and strategy, covered for the executives running hospitals and health systems in a margin-pressured market.'),
+  ('payers', 'Payers & Insurance', 'Reimbursement, claims automation, value-based contracts, and data sharing, decoded for the teams navigating a tougher payer landscape.'),
+  ('digital-health', 'Digital Health', 'Virtual care, remote monitoring, and patient engagement, covered for the teams building the next generation of connected health experiences.'),
+  ('cybersecurity', 'Cybersecurity', 'Risk, resilience, and regulatory compliance, covered for the leaders protecting healthcare organizations from growing cyber threats.'),
+  ('pharma-biotech', 'Pharma & Biotech', 'Drug development, commercial strategy, device innovation, and AI in the pipeline, covered for the teams bringing therapies and technologies to market.')
 on conflict (slug) do nothing;
 
 -- ---------------------------------------------------------------------------

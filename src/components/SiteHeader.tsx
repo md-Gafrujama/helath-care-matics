@@ -5,10 +5,9 @@ import MobileNav from "@/components/MobileNav";
 
 function todayLabel() {
   return new Intl.DateTimeFormat("en-US", {
-    weekday: "long",
-    month: "long",
+    weekday: "short",
+    month: "short",
     day: "numeric",
-    year: "numeric",
   }).format(new Date());
 }
 
@@ -19,34 +18,28 @@ export default function SiteHeader({
 } = {}) {
   return (
     <>
-      {/* ============ UTILITY BAR ============ */}
       <div className="utility">
         <div className="wrap">
           <nav className="utility-links" aria-label="Utility">
-            <a href="#latest">Latest News</a>
+            <Link href="/#latest">Latest News</Link>
             <Link href="/#nl">Newsletters</Link>
-            <a href="#events">Events</a>
-            <a href="#research">Research</a>
-            <a href="#advertise">Advertise</a>
+            <Link href="/#research">Research</Link>
+            <Link href="/#advertise">Advertise</Link>
           </nav>
           <div className="utility-right">
             <span className="date">{todayLabel()}</span>
-            <span aria-hidden="true">|</span>
-            <a href="#" style={{ color: "#cfe0d9" }}>Sign in</a>
           </div>
         </div>
       </div>
 
-      {/* ============ MASTHEAD ============ */}
       <header className="masthead">
         <div className="wrap">
           <BrandLogo />
           <nav className="nav" aria-label="Primary">
-            <Link href="/#latest" className={currentTopicSlug === "news" ? "active" : undefined}>News</Link>
-            <Link href="/#analysis" className={currentTopicSlug === "analysis" ? "active" : undefined}>Analysis</Link>
-            <Link href="/#research" className={currentTopicSlug === "research" ? "active" : undefined}>Research</Link>
-            <Link href="/#events" className={currentTopicSlug === "events" ? "active" : undefined}>Events</Link>
-            <Link href="/resources" className={currentTopicSlug === "resources" ? "active" : undefined}>Resources</Link>
+            <Link href="/#latest">News</Link>
+            <Link href="/#analysis">Analysis</Link>
+            <Link href="/#research">Research</Link>
+            <Link href="/resources">Resources</Link>
           </nav>
           <div className="masthead-right">
             <SearchBar />
@@ -58,46 +51,37 @@ export default function SiteHeader({
         </div>
       </header>
 
-      {/* ============ TICKER ============ */}
-      <TickerBar />
-    </>
-  );
-}
-
-function TickerBar() {
-  return (
-    <div className="ticker">
-      <div className="wrap">
-        <span className="ticker-label">
-          <span className="live-dot" />
-          Trending
-        </span>
-        <div className="ticker-track">
-          <TickerContent />
+      <div className="ticker">
+        <div className="wrap">
+          <span className="ticker-label">
+            <span className="live-dot" />
+            Trending
+          </span>
+          <div className="ticker-track">
+            <div className="ticker-move">
+              {[
+                "AI in Healthcare",
+                "Hospital M&A",
+                "Healthcare Cybersecurity",
+                "Digital Health",
+                "Revenue Cycle",
+                "Health Policy",
+                "AI in Healthcare",
+                "Hospital M&A",
+                "Healthcare Cybersecurity",
+                "Digital Health",
+                "Revenue Cycle",
+                "Health Policy",
+              ].map((label, i) => (
+                <span key={`${label}-${i}`}>
+                  <span className="ticker-item">{label}</span>
+                  {i < 11 && <span className="sep">/</span>}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function TickerContent() {
-  const items = [
-    "AI in Healthcare",
-    "Hospital M&A",
-    "Healthcare Cybersecurity",
-    "Digital Health",
-    "Revenue Cycle",
-    "Health Policy",
-  ];
-
-  return (
-    <div className="ticker-move">
-      {[...items, ...items].map((label, i) => (
-        <span key={i}>
-          <a href="#">{label}</a>
-          {i < items.length * 2 - 1 && <span className="sep">/</span>}
-        </span>
-      ))}
-    </div>
+    </>
   );
 }

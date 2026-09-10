@@ -1,8 +1,10 @@
 /**
- * Generate one AI article per HR news topic via the cron API.
+ * Generate AI articles per HealthMatics news topic via the cron API.
  * Requires: npm run dev (or next start) and CRON_SECRET in .env.local
  *
- * Usage: npm run generate:topics
+ * Usage:
+ *   npm run generate:topics
+ *   PER_TOPIC=2 npm run generate:topics
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -27,7 +29,16 @@ function loadEnv() {
   }
 }
 
-const TOPICS = ["compliance", "talent", "rewards", "analytics", "culture"];
+const TOPICS = [
+  "health-it",
+  "hospitals",
+  "payers",
+  "digital-health",
+  "cybersecurity",
+  "pharma-biotech",
+];
+
+const PER_TOPIC = Math.max(1, Number(process.env.PER_TOPIC || "1") || 1);
 const BASE =
   process.env.GENERATE_BASE_URL ||
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -56,27 +67,43 @@ async function generateForTopic(slug) {
 }
 
 async function main() {
-  console.log(`HRmatics generate — ${TOPICS.length} topics via ${BASE}\n`);
+  console.log(
+    `HealthMatics generate, ${TOPICS.length} topics × ${PER_TOPIC} via ${BASE}\n`,
+  );
+
+  let okCount = 0;
+  let failCount = 0;
 
   for (const slug of TOPICS) {
-    console.log(`→ ${slug} (1–2 min)...`);
-    const result = await generateForTopic(slug);
-    if (result.status >= 200 && result.status < 300 && result.data?.ok !== false) {
-      const created = result.data.articles ?? result.data.created ?? [];
-      for (const row of created) {
-        console.log(`  ✓ ${row.topic}: /article/${row.slug}`);
+    for (let n = 1; n <= PER_TOPIC; n++) {
+      console.log(`→ ${slug} (${n}/${PER_TOPIC}, ~1-2 min)...`);
+      const result = await generateForTopic(slug);
+      if (
+        result.status >= 200 &&
+        result.status < 300 &&
+        result.data?.ok !== false
+      ) {
+        const created = result.data.articles ?? result.data.created ?? [];
+        for (const row of created) {
+          console.log(`  ✓ ${row.topic}: /article/${row.slug}`);
+          okCount += 1;
+        }
+        if (created.length === 0) {
+          console.log("  ✓ done (no new rows in response)");
+        }
+      } else {
+        failCount += 1;
+        console.error(
+          `  ✗ failed (${result.status}):`,
+          result.data?.error ?? result.data,
+        );
       }
-      if (created.length === 0) {
-        console.log("  ✓ done (no new rows in response)");
-      }
-    } else {
-      console.error(`  ✗ failed (${result.status}):`, result.data?.error ?? result.data);
-      process.exit(1);
+      console.log("");
     }
-    console.log("");
   }
 
-  console.log("All topics generated.");
+  console.log(`Done. Created ${okCount}, failed ${failCount}.`);
+  if (failCount > 0 && okCount === 0) process.exit(1);
 }
 
 main().catch((err) => {

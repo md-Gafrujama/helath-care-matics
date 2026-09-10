@@ -27,7 +27,7 @@ export default async function Page() {
               <span className="kicker">HealthMatics</span>
               <h1>Healthcare intelligence, published daily</h1>
               <p className="hr-hero-dek">
-                Generate your first story from the admin panel — one topic at a
+                Generate your first story from the admin panel, one topic at a
                 time with research, full articles, and cover images.
               </p>
               <Link href="/admin/articles/new#generate" className="hr-hero-cta">
@@ -42,7 +42,7 @@ export default async function Page() {
         <HomeBrief stories={briefStories} />
 
         {hasContent && topicSections.length > 0 && (
-          <div className="hr-desks">
+          <div className="hr-desks" id="topics">
             {topicSections.map((section) => (
               <HomeTopicSection
                 key={section.config.slug}
@@ -57,16 +57,12 @@ export default async function Page() {
         <section className="section wrap" id="resources">
           <div className="section-head">
             <div className="marker"><h2>Explore by Topic</h2></div>
-            <a href="#" className="see-all">All topics</a>
+            <Link href="/#topics" className="see-all">All topics</Link>
           </div>
           <div className="topics-row">
             <Link href="/topic/health-it" className="topic-chip">
-              <div className="t-name">AI in Healthcare</div>
-              <div className="t-count">Pillar hub</div>
-            </Link>
-            <Link href="/topic/health-it" className="topic-chip">
               <div className="t-name">Health IT</div>
-              <div className="t-count">Interoperability, EHR</div>
+              <div className="t-count">Interoperability, EHR, AI</div>
             </Link>
             <Link href="/topic/hospitals" className="topic-chip">
               <div className="t-name">Hospitals</div>
@@ -83,6 +79,10 @@ export default async function Page() {
             <Link href="/topic/cybersecurity" className="topic-chip">
               <div className="t-name">Cybersecurity</div>
               <div className="t-count">Risk, resilience</div>
+            </Link>
+            <Link href="/topic/pharma-biotech" className="topic-chip">
+              <div className="t-name">Pharma &amp; Biotech</div>
+              <div className="t-count">Pipeline, commercial</div>
             </Link>
           </div>
         </section>
@@ -190,42 +190,6 @@ export default async function Page() {
                 </div>
               </div>
             </article>
-          </div>
-        </section>
-
-        {/* ============ EVENTS ============ */}
-        <section className="section section-band" id="events">
-          <div className="wrap">
-            <div className="section-head">
-              <div className="marker"><h2>Events &amp; Webinars</h2></div>
-              <a href="#" className="see-all">All events</a>
-            </div>
-            <div className="events-grid">
-              <article className="event-card">
-                <div className="event-top">
-                  <div className="event-date"><span className="m">Mar</span><span className="d">18</span></div>
-                  <div><div className="event-type">Webinar</div><div className="etime">2:00 PM to 3:00 PM ET</div></div>
-                </div>
-                <h3><a href="#" className="headline-link">Building an Enterprise AI Governance Model That Clinicians Trust</a></h3>
-                <a href="#" className="btn btn-ghost">Register now</a>
-              </article>
-              <article className="event-card">
-                <div className="event-top">
-                  <div className="event-date"><span className="m">Apr</span><span className="d">09</span></div>
-                  <div><div className="event-type">Virtual Event</div><div className="etime">All day</div></div>
-                </div>
-                <h3><a href="#" className="headline-link">The Revenue Cycle Automation Summit</a></h3>
-                <a href="#" className="btn btn-ghost">Register now</a>
-              </article>
-              <article className="event-card">
-                <div className="event-top">
-                  <div className="event-date"><span className="m">Apr</span><span className="d">23</span></div>
-                  <div><div className="event-type">On Demand</div><div className="etime">Watch anytime</div></div>
-                </div>
-                <h3><a href="#" className="headline-link">Healthcare Cybersecurity in an Era of Connected Devices</a></h3>
-                <a href="#" className="btn btn-ghost">Watch now</a>
-              </article>
-            </div>
           </div>
         </section>
 

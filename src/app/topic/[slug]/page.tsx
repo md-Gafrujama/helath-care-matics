@@ -11,7 +11,7 @@ import { getTopicBySlug } from "@/lib/topics";
 import { getArticlesByTopicSlug } from "@/lib/articles";
 import { articlesToStories, syntheticTopic } from "@/lib/topic-stories";
 
-export const revalidate = 300;
+export const revalidate = 60;
 
 export async function generateMetadata({
   params,
@@ -40,16 +40,14 @@ export default async function TopicPage({
   const dbTopic = await getTopicBySlug(slug);
   const topic = dbTopic ?? syntheticTopic(config);
   const isPlaybooks = slug === "playbooks";
-  const articles = isPlaybooks
-    ? []
-    : await getArticlesByTopicSlug(slug);
+  const articles = isPlaybooks ? [] : await getArticlesByTopicSlug(slug, 60);
   const stories = articlesToStories(articles);
   const [lead, ...rest] = stories;
 
   return (
     <>
       <SiteHeader currentTopicSlug={slug} />
-      <main>
+      <main className="topic-page">
         <TopicHero
           config={config}
           description={dbTopic?.description ?? config.description}
@@ -62,16 +60,21 @@ export default async function TopicPage({
                 <h2>Free downloads</h2>
                 <span className="line" />
               </div>
-            ) : lead ? (
+            ) : stories.length === 0 ? (
+              <p className="topic-empty">
+                No stories published in {config.navLabel} yet. Generate one from
+                the admin panel for this topic.
+              </p>
+            ) : (
               <>
-                <FeaturedStory story={lead} />
+                {lead && <FeaturedStory story={lead} />}
                 {rest.length > 0 && (
                   <>
                     <div className="sec-head">
-                      <h2>More in {config.crumb}</h2>
+                      <h2>All stories in {config.crumb}</h2>
                       <span className="line" />
                     </div>
-                    <div className="home-story-grid topic-story-grid">
+                    <div className="hr-story-grid topic-story-grid">
                       {rest.map((story) => (
                         <TopicStoryCard key={story.id} story={story} />
                       ))}
@@ -79,11 +82,6 @@ export default async function TopicPage({
                   </>
                 )}
               </>
-            ) : (
-              <p className="sub" style={{ marginTop: 24 }}>
-                No stories published in {config.navLabel} yet. Generate one from
-                the admin panel for this topic.
-              </p>
             )}
           </div>
         </section>

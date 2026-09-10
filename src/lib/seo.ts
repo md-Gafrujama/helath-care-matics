@@ -1,14 +1,20 @@
 import type { Article, ArticleBody } from "@/types/database";
 
 export const SEO_LIMITS = {
+  /** On-page H1, keep scannable; Google has no hard cap, 60-70 is best practice */
   h1: 70,
+  /** SERP title, ~50-60 visible characters */
   metaTitle: 60,
-  metaDescription: 160,
-  ogTitle: 70,
-  aeoAnswer: 320,
-  geoSummary: 400,
-  focusKeyword: 50,
-  keywords: 180,
+  /** SERP snippet, ~150-160 characters */
+  metaDescription: 155,
+  /** Social share title */
+  ogTitle: 65,
+  /** Concise answer for AI Overviews / voice */
+  aeoAnswer: 280,
+  /** Citation-friendly abstract for generative engines */
+  geoSummary: 320,
+  focusKeyword: 48,
+  keywords: 160,
 } as const;
 
 export const META_TITLE_BRAND = " | HealthMatics";
