@@ -308,7 +308,7 @@ export default function ArticleForm({
             <p className="seo-preview-title">
               {metaTitle || title || "Meta title"}
             </p>
-            <p className="seo-preview-url">healthmatics.com › article › slug</p>
+            <p className="seo-preview-url">healthmatics.net › article › slug</p>
             <p className="seo-preview-desc">
               {metaDescription || "Meta description appears here."}
             </p>

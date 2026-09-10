@@ -39,6 +39,10 @@ export const metadata: Metadata = {
   },
   description:
     "Independent healthcare news, analysis, research and insights for the executives, technology leaders and decision-makers transforming healthcare.",
+  applicationName: "HealthMatics",
+  alternates: {
+    canonical: "/",
+  },
   robots: {
     index: true,
     follow: true,
@@ -63,6 +67,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "HealthMatics",
+    url: SITE_URL,
+    title: "HealthMatics | Healthcare Intelligence for the People Shaping What's Next",
+    description:
+      "Independent healthcare news, analysis, research and insights for the executives, technology leaders and decision-makers transforming healthcare.",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HealthMatics | Healthcare Intelligence",
+    description:
+      "Independent healthcare news, analysis, research and insights for decision-makers.",
   },
 };
 

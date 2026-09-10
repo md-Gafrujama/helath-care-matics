@@ -2,6 +2,8 @@
 
 Healthcare intelligence, news, analysis, research, and insights for executives and decision-makers transforming healthcare.
 
+**Production domain:** [https://healthmatics.net](https://healthmatics.net)
+
 ## Stack
 
 - Next.js 16 (App Router)
@@ -29,13 +31,16 @@ Admin: `/admin/login`
 1. Push this repo to GitHub.
 2. Import the project in [Vercel](https://vercel.com/new).
 3. Add every variable from `.env.example` in **Project → Settings → Environment Variables** (Production + Preview).
-4. Set `NEXT_PUBLIC_SITE_URL` to your Vercel URL (or custom domain), e.g. `https://your-app.vercel.app`.
-5. Deploy. After the first deploy, update `NEXT_PUBLIC_SITE_URL` if the URL changed, then redeploy.
-6. In Supabase → Authentication → URL configuration, add your Vercel domain to **Site URL** and **Redirect URLs**.
+4. Set Production `NEXT_PUBLIC_SITE_URL` to **`https://healthmatics.net`**.
+5. In Vercel → Domains, add `healthmatics.net` and `www.healthmatics.net`.
+6. Deploy. Confirm:
+   - `https://healthmatics.net/sitemap.xml`
+   - `https://healthmatics.net/robots.txt`
+7. In Supabase → Authentication → URL configuration, set Site URL to `https://healthmatics.net` and add that domain to Redirect URLs.
 
 ### Cron
 
-`vercel.json` schedules `POST /api/cron/generate-article` daily at **15:50 UTC** (9:20 PM IST).  
+`vercel.json` schedules `/api/cron/generate-article` daily at **15:50 UTC** (9:20 PM IST).  
 Ensure `CRON_SECRET` is set in Vercel env so the job is authorized.
 
 ### Scripts

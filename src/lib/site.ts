@@ -1,20 +1,49 @@
 import { revalidatePath } from "next/cache";
 
-const PRODUCTION_SITE_URL = "https://www.healthmatics.com";
+/** Canonical production domain for HealthMatics */
+export const PRODUCTION_SITE_URL = "https://healthmatics.net";
 
 function isLocalhostUrl(url: string): boolean {
   return /localhost|127\.0\.0\.1/i.test(url);
+}
+
+/** Normalize to https origin without trailing slash. Prefer apex healthmatics.net. */
+export function normalizeSiteUrl(raw: string): string {
+  const trimmed = raw.trim().replace(/\/+$/, "");
+  if (!trimmed) return PRODUCTION_SITE_URL;
+
+  let withProtocol = trimmed;
+  if (!/^https?:\/\//i.test(withProtocol)) {
+    withProtocol = `https://${withProtocol}`;
+  }
+
+  try {
+    const u = new URL(withProtocol);
+    const host = u.hostname.toLowerCase().replace(/^www\./, "");
+    if (host === "healthmatics.net") {
+      return PRODUCTION_SITE_URL;
+    }
+    u.hash = "";
+    u.search = "";
+    return `${u.protocol}//${u.host}`.replace(/\/+$/, "");
+  } catch {
+    return PRODUCTION_SITE_URL;
+  }
 }
 
 export function getSiteUrl(): string {
   const raw = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/+$/, "");
 
   if (process.env.VERCEL_ENV === "production") {
-    if (raw && !isLocalhostUrl(raw)) return raw;
+    if (raw && !isLocalhostUrl(raw)) return normalizeSiteUrl(raw);
     return PRODUCTION_SITE_URL;
   }
 
-  if (raw) return raw;
+  if (raw && !isLocalhostUrl(raw) && process.env.NODE_ENV === "production") {
+    return normalizeSiteUrl(raw);
+  }
+
+  if (raw) return raw.replace(/\/+$/, "");
 
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL.replace(/\/+$/, "")}`;
