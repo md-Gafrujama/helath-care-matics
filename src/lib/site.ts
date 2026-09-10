@@ -1,13 +1,16 @@
 import { revalidatePath } from "next/cache";
 
-/** Canonical production domain for HealthMatics */
-export const PRODUCTION_SITE_URL = "https://healthmatics.net";
+/**
+ * Canonical production domain.
+ * Vercel redirects apex → www, so sitemap/robots/OG must use www.
+ */
+export const PRODUCTION_SITE_URL = "https://www.healthmatics.net";
 
 function isLocalhostUrl(url: string): boolean {
   return /localhost|127\.0\.0\.1/i.test(url);
 }
 
-/** Normalize to https origin without trailing slash. Prefer apex healthmatics.net. */
+/** Normalize to https origin without trailing slash. Prefer www.healthmatics.net. */
 export function normalizeSiteUrl(raw: string): string {
   const trimmed = raw.trim().replace(/\/+$/, "");
   if (!trimmed) return PRODUCTION_SITE_URL;

@@ -31,12 +31,13 @@ Admin: `/admin/login`
 1. Push this repo to GitHub.
 2. Import the project in [Vercel](https://vercel.com/new).
 3. Add every variable from `.env.example` in **Project → Settings → Environment Variables** (Production + Preview).
-4. Set Production `NEXT_PUBLIC_SITE_URL` to **`https://healthmatics.net`**.
-5. In Vercel → Domains, add `healthmatics.net` and `www.healthmatics.net`.
+4. Set Production `NEXT_PUBLIC_SITE_URL` to **`https://www.healthmatics.net`** (must match Vercel primary / Search Console property).
+5. In Vercel → Domains, keep `www.healthmatics.net` as primary (apex can redirect to www).
 6. Deploy. Confirm:
-   - `https://healthmatics.net/sitemap.xml`
-   - `https://healthmatics.net/robots.txt`
-7. In Supabase → Authentication → URL configuration, set Site URL to `https://healthmatics.net` and add that domain to Redirect URLs.
+   - `https://www.healthmatics.net/sitemap.xml`
+   - `https://www.healthmatics.net/robots.txt`
+7. In Supabase → Authentication → URL configuration, set Site URL to `https://www.healthmatics.net` and add redirect URLs for that domain.
+8. In Google Search Console, submit sitemap as: `sitemap.xml` (on the **www** property).
 
 ### Cron
 
