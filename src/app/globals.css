@@ -126,10 +126,10 @@ button { font-family: inherit; cursor: pointer; }
   transition: background .15s ease, color .15s ease, border-color .15s ease;
   line-height: 1; cursor: pointer;
 }
-.btn-primary { background: var(--pine); color: #fff; }
-.btn-primary:hover { background: var(--pine-deep); }
 .btn-solid { background: var(--pine); color: #fff; border-color: var(--pine); }
-.btn-solid:hover { background: var(--pine-deep); border-color: var(--pine-deep); }
+.btn-solid:hover { background: var(--pine-deep); border-color: var(--pine-deep); color: #fff; }
+.btn-primary { background: var(--pine); color: #fff; }
+.btn-primary:hover { background: var(--pine-deep); color: #fff; }
 .btn-out,
 .btn-outline {
   background: transparent;
@@ -2268,6 +2268,10 @@ button { font-family: inherit; cursor: pointer; }
   flex-shrink: 0;
   padding: 8px 12px !important;
   font-size: 12.5px !important;
+  color: #fff !important;
+}
+.admin-recent-edit:hover {
+  color: #fff !important;
 }
 
 .admin-actions {
@@ -2353,14 +2357,48 @@ button { font-family: inherit; cursor: pointer; }
 .admin-table tr:last-child td { border-bottom: none; }
 .admin-table a { color: var(--pine); font-weight: 600; }
 .admin-table a:hover { color: var(--pine-deep); }
+/* Keep button labels visible — table link color was hiding "Edit" on solid buttons */
+.admin-table a.btn,
+.admin-table a.btn-solid,
+.admin-table a.btn-primary {
+  color: #fff !important;
+}
+.admin-table a.btn:hover,
+.admin-table a.btn-solid:hover,
+.admin-table a.btn-primary:hover {
+  color: #fff !important;
+}
+.admin-table a.btn-ghost,
+.admin-table a.btn-out,
+.admin-table a.btn-outline {
+  color: var(--ink) !important;
+}
+.admin-table a.btn-ghost:hover,
+.admin-table a.btn-out:hover,
+.admin-table a.btn-outline:hover {
+  color: var(--pine) !important;
+}
 .admin-td-now { white-space: nowrap; color: var(--ink-mute); font-size: 12.5px; }
 .admin-td-error { color: #8b2e2e; font-size: 12.5px; max-width: 240px; }
 .admin-row-actions {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
+  gap: 6px;
+  align-items: stretch;
+  min-width: 110px;
 }
+.admin-row-actions .btn,
+.admin-row-actions a.btn,
+.admin-row-actions button.btn {
+  width: 100%;
+  justify-content: center;
+  padding: 8px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.admin-row-actions form { margin: 0; width: 100%; }
+.admin-row-actions form .btn { width: 100%; }
 .admin-td-seo,
 .admin-seo-cell {
   font-size: 12.5px;
