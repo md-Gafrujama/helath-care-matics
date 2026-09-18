@@ -112,9 +112,8 @@ export default function SiteFooter() {
 
         <div className="foot-bottom">
           <span className="foot-copy">
-            © {year} HealthMatics. Independent publication.
-            <br />
-            Published by Quore B2B Marketing
+            © {year} HealthMatics. Independent publication. Published by Quore
+            B2B Marketing
           </span>
           <div className="foot-legal">
             <Link href="/about#standards">Privacy</Link>
