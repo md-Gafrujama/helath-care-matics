@@ -42,6 +42,14 @@ export const metadata: Metadata = {
   applicationName: "HealthMatics",
   alternates: {
     canonical: "/",
+    types: {
+      "application/rss+xml": [
+        {
+          url: "/feed.xml",
+          title: "HealthMatics RSS",
+        },
+      ],
+    },
   },
   robots: {
     index: true,

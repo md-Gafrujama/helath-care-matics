@@ -56,8 +56,10 @@ export function getSiteUrl(): string {
   return "http://localhost:3000";
 }
 
-/** Bust cached sitemap after publish / unpublish / delete. */
+/** Bust cached sitemap + RSS after publish / unpublish / delete. */
 export function revalidateSitemap() {
   revalidatePath("/sitemap.xml");
   revalidatePath("/robots.txt");
+  revalidatePath("/feed.xml");
+  revalidatePath("/rss.xml");
 }
