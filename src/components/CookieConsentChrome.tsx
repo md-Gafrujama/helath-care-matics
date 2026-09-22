@@ -13,7 +13,9 @@ export default function CookieConsentChrome() {
 
   return (
     <>
-      <GoogleAnalytics />
+      <Suspense fallback={null}>
+        <GoogleAnalytics />
+      </Suspense>
       <Suspense fallback={null}>
         <SiteAnalyticsBeacon />
       </Suspense>

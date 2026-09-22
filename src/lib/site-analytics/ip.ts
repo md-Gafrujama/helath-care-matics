@@ -14,8 +14,16 @@ export function resolveClientIp(request: Request): string | null {
     headers.get("x-client-ip"),
     headers.get("true-client-ip"),
     headers.get("fastly-client-ip"),
+    headers.get("fly-client-ip"),
   ];
 
+  for (const raw of candidates) {
+    if (!raw) continue;
+    const first = extractIp(raw);
+    if (first && !isPrivateOrLocal(first)) return first;
+  }
+
+  // Fall back to first public-or-private candidate (local/dev).
   for (const raw of candidates) {
     if (!raw) continue;
     const first = extractIp(raw);

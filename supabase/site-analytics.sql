@@ -76,7 +76,11 @@ create policy "site_analytics_events_admin_select" on public.site_analytics_even
 
 -- Inserts go through service-role API only
 
--- Retention cleanup helper (~180 days). Schedule via pg_cron or Vercel cron if desired.
+-- Retention cleanup helper (~180 days). Also called by Vercel cron
+-- GET /api/cron/cleanup-analytics (weekly). Optional pg_cron:
+--   select cron.schedule('cleanup-site-analytics', '20 4 * * 0',
+--     $$select public.cleanup_site_analytics_events()$$);
+
 create or replace function public.cleanup_site_analytics_events()
 returns integer
 language plpgsql
@@ -96,3 +100,7 @@ begin
   return deleted_count;
 end;
 $$;
+
+-- Helpful for campaign breakdowns in admin
+create index if not exists idx_site_analytics_utm_source
+  on public.site_analytics_events ((marketing_meta->>'utmSource'));

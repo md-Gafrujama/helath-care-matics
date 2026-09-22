@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   CONSENT_EVENT,
   applyGoogleConsent,
@@ -13,16 +14,17 @@ const MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
 
 /**
  * Loads GA4 with Consent Mode defaults denied until the visitor opts in.
- * Safe to mount site-wide; no-ops when measurement ID is missing.
+ * No hits before analytics consent. Safe no-op when measurement ID is missing.
  */
 export default function GoogleAnalytics() {
   const [ready, setReady] = useState(false);
+  const pathname = usePathname() || "/";
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (!MEASUREMENT_ID || !MEASUREMENT_ID.startsWith("G-")) return;
 
     window.dataLayer = window.dataLayer || [];
-    // GA expects the Arguments object, not a plain array.
     function gtag(..._args: unknown[]) {
       // eslint-disable-next-line prefer-rest-params
       window.dataLayer!.push(arguments);
@@ -46,29 +48,28 @@ export default function GoogleAnalytics() {
     });
 
     const existing = getConsent();
-    if (existing) {
-      applyGoogleConsent(existing);
-      if (existing.analytics) {
-        gtag("event", "page_view", {
-          page_path: window.location.pathname + window.location.search,
-        });
-      }
-    }
+    if (existing) applyGoogleConsent(existing);
 
     const onUpdate = (e: Event) => {
       const detail = (e as CustomEvent<ConsentState>).detail;
       applyGoogleConsent(detail || getConsent());
-      if (detail?.analytics && typeof window.gtag === "function") {
-        window.gtag("event", "page_view", {
-          page_path: window.location.pathname + window.location.search,
-        });
-      }
     };
 
     window.addEventListener(CONSENT_EVENT, onUpdate);
     setReady(true);
     return () => window.removeEventListener(CONSENT_EVENT, onUpdate);
   }, []);
+
+  // SPA navigations: only after analytics consent is granted.
+  useEffect(() => {
+    if (!ready || !MEASUREMENT_ID.startsWith("G-")) return;
+    if (typeof window.gtag !== "function") return;
+    const consent = getConsent();
+    if (!consent?.analytics) return;
+
+    const pagePath = `${pathname}${searchParams?.toString() ? `?${searchParams.toString()}` : ""}`;
+    window.gtag("event", "page_view", { page_path: pagePath });
+  }, [ready, pathname, searchParams]);
 
   if (!MEASUREMENT_ID || !MEASUREMENT_ID.startsWith("G-") || !ready) return null;
 

@@ -106,9 +106,11 @@ export default function PrivacyPage() {
           <p>
             We use infrastructure providers (for example hosting and database
             services) to operate the site. Optional Google Analytics runs only
-            with analytics consent. We do not sell personal information. US and
-            other cross-border processing may occur where our processors
-            operate; we apply appropriate safeguards for transfers.
+            with analytics consent. We do not sell personal information and we
+            do not use the described marketing cookies for a &quot;sale&quot; of
+            personal information under US state privacy laws. US and other
+            cross-border processing may occur where our processors operate; we
+            apply appropriate safeguards for transfers.
           </p>
 
           <h2 id="rights">Your rights and choices</h2>

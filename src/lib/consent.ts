@@ -408,6 +408,24 @@ export function saveConsent({
   return consent;
 }
 
+/** Fire a first-party custom event (CTA, affiliate, form) only with analytics consent. */
+export function trackCustomEvent(
+  eventName: string,
+  meta: Record<string, unknown> = {},
+) {
+  if (typeof window === "undefined") return;
+  const consent = getConsent();
+  if (!consent?.analytics) return;
+  postSiteAnalyticsEvent({
+    kind: "custom",
+    consent,
+    customMeta: {
+      eventName: String(eventName).slice(0, 80),
+      ...meta,
+    },
+  });
+}
+
 export function openCookiePreferences() {
   if (typeof window === "undefined") return;
   window.dispatchEvent(new CustomEvent(OPEN_PREFS_EVENT));
