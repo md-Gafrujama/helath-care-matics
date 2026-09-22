@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 
 export default function AdminShell({
@@ -11,6 +12,12 @@ export default function AdminShell({
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const [fadeKey, setFadeKey] = useState(pathname);
+
+  useEffect(() => {
+    setFadeKey(pathname);
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -30,7 +37,15 @@ export default function AdminShell({
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          aria-hidden
+        >
           {open ? (
             <path d="M6 6l12 12M18 6L6 18" />
           ) : (
@@ -50,7 +65,11 @@ export default function AdminShell({
       )}
 
       <AdminSidebar email={email} onNavigate={() => setOpen(false)} />
-      <main className="admin-main">{children}</main>
+      <main className="admin-main">
+        <div key={fadeKey} className="admin-main-fade">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Newsreader } from "next/font/google";
 import ClientEffects from "@/components/ClientEffects";
 import CookieConsentShell from "@/components/CookieConsentShell";
+import NavigationProgress from "@/components/NavigationProgress";
 import SiteChrome from "@/components/SiteChrome";
 import JsonLd from "@/components/JsonLd";
 import { getSiteUrl } from "@/lib/site";
@@ -128,6 +129,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <NavigationProgress />
         <ClientEffects />
         <SiteChrome />
         <CookieConsentShell />
