@@ -238,10 +238,29 @@ export default function CookiesReportClient() {
       ) : !data.available ? (
         <div className="admin-card">
           <h2>Setup required</h2>
-          <p className="admin-empty">
-            {data.detail ||
-              "Run supabase/site-analytics.sql in the Supabase SQL Editor, then Accept/Reject on the public site to populate this report."}
+          <p className="admin-empty" style={{ maxWidth: 560 }}>
+            Analytics tables are missing in Supabase (
+            <code>site_analytics_events</code> / <code>consent_events</code>
+            ). The app code is deployed, but the SQL migration was not run on
+            this project yet.
           </p>
+          <ol style={{ margin: "14px 0 0", paddingLeft: 20, lineHeight: 1.6 }}>
+            <li>
+              Open Supabase → <strong>SQL Editor</strong>
+            </li>
+            <li>
+              Paste and run the full file{" "}
+              <code>supabase/site-analytics.sql</code>
+            </li>
+            <li>
+              Come back here and click <strong>Refresh</strong>
+            </li>
+          </ol>
+          {data.detail && (
+            <p className="admin-empty" style={{ marginTop: 12 }}>
+              Technical detail: {data.detail}
+            </p>
+          )}
           <p style={{ marginTop: 12 }}>
             <Link href="/privacy#cookies" target="_blank" className="admin-card-link">
               View public Privacy Policy →
