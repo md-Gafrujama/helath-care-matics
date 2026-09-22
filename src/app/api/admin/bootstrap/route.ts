@@ -48,6 +48,15 @@ export async function POST(request: Request) {
     );
 
     if (found) {
+      const { error: pwError } = await supabase.auth.admin.updateUserById(
+        found.id,
+        { password, email_confirm: true },
+      );
+      if (pwError) {
+        steps.push(`Admin password sync failed: ${pwError.message}`);
+      } else {
+        steps.push(`Admin password synced: ${email}`);
+      }
       await supabase
         .from("admin_users")
         .upsert({ user_id: found.id }, { onConflict: "user_id" });

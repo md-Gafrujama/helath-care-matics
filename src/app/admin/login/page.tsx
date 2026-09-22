@@ -14,9 +14,13 @@ export const metadata: Metadata = {
 export default async function AdminLoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; error?: string }>;
 }) {
-  const { next } = await searchParams;
+  const { next, error } = await searchParams;
+  const initialError =
+    error === "forbidden"
+      ? "This account is signed in but not authorized for admin. Contact an editor."
+      : null;
 
   return (
     <>
@@ -72,7 +76,7 @@ export default async function AdminLoginPage({
                 <p className="sub">Use your HealthMatics staff credentials.</p>
               </div>
             </div>
-            <LoginForm next={next ?? "/admin"} />
+            <LoginForm next={next ?? "/admin"} initialError={initialError} />
             <Link href="/" className="admin-login-back">
               ← Back to public site
             </Link>

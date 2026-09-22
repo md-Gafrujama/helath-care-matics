@@ -1,43 +1,26 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { useActionState, useState } from "react";
+import { signIn } from "@/lib/actions/auth";
 
-export default function LoginForm({ next }: { next: string }) {
-  const router = useRouter();
-  const [pending, setPending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export default function LoginForm({
+  next,
+  initialError,
+}: {
+  next: string;
+  initialError?: string | null;
+}) {
+  const [state, formAction, pending] = useActionState(signIn, {
+    error: initialError ?? null,
+  });
   const [showPassword, setShowPassword] = useState(false);
 
-  async function handleSubmit(formData: FormData) {
-    setPending(true);
-    setError(null);
-
-    const email = String(formData.get("email") ?? "");
-    const password = String(formData.get("password") ?? "");
-    const supabase = createClient();
-
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (signInError) {
-      setError(signInError.message);
-      setPending(false);
-      return;
-    }
-
-    router.push(next.startsWith("/admin") ? next : "/admin");
-    router.refresh();
-  }
-
   return (
-    <form action={handleSubmit} className="admin-login-form">
-      {error && (
+    <form action={formAction} className="admin-login-form">
+      <input type="hidden" name="next" value={next} />
+      {state.error && (
         <div className="admin-error" role="alert">
-          {error}
+          {state.error}
         </div>
       )}
       <div className="field">
@@ -75,7 +58,7 @@ export default function LoginForm({ next }: { next: string }) {
       </div>
       <button
         type="submit"
-        className="btn btn-primary admin-login-submit"
+        className="btn btn-solid admin-login-submit"
         disabled={pending}
       >
         {pending ? "Signing in…" : "Sign in to admin"}
