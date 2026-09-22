@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Newsreader } from "next/font/google";
 import ClientEffects from "@/components/ClientEffects";
+import CookieConsentShell from "@/components/CookieConsentShell";
 import SiteChrome from "@/components/SiteChrome";
 import JsonLd from "@/components/JsonLd";
 import { getSiteUrl } from "@/lib/site";
@@ -100,7 +101,10 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${inter.variable} ${newsreader.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-paper text-ink">
+      <body
+        className="min-h-full flex flex-col bg-paper text-ink"
+        suppressHydrationWarning
+      >
         <JsonLd
           data={{
             "@context": "https://schema.org",
@@ -126,6 +130,7 @@ export default function RootLayout({
         {children}
         <ClientEffects />
         <SiteChrome />
+        <CookieConsentShell />
       </body>
     </html>
   );

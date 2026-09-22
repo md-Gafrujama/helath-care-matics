@@ -53,6 +53,30 @@ const LINKS = [
       </svg>
     ),
   },
+  {
+    href: "/admin/cookies-report",
+    label: "Cookies & visitors",
+    hint: "Sessions & attribution",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <circle cx="12" cy="12" r="8" />
+        <circle cx="9" cy="10" r="1" fill="currentColor" stroke="none" />
+        <circle cx="14.5" cy="9.5" r="1.2" fill="currentColor" stroke="none" />
+        <circle cx="11" cy="15" r="1.1" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    href: "/admin/gdpr",
+    label: "GDPR consents",
+    hint: "Opt-in lawfulness",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />
+        <path d="M9.5 12l1.8 1.8L15 10" />
+      </svg>
+    ),
+  },
 ] as const;
 
 export default function AdminSidebar({
@@ -134,9 +158,9 @@ export default function AdminSidebar({
             {email && <p className="admin-sidebar-email">{email}</p>}
           </div>
         </div>
-        <form action={signOut}>
-          <button type="submit" className="admin-signout">
-            Sign out
+        <form action={signOut} className="admin-signout-form">
+          <button type="submit" className="admin-signout" data-testid="admin-logout">
+            Logout
           </button>
         </form>
       </div>

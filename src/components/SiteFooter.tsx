@@ -1,5 +1,6 @@
 import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
+import CookiePreferencesTrigger from "@/components/CookiePreferencesTrigger";
 import { getNavTopics } from "@/lib/topic-config";
 
 export default function SiteFooter() {
@@ -105,6 +106,7 @@ export default function SiteFooter() {
               <Link href="/about#advertise">Advertise</Link>
               <Link href="/about#contact">Contact</Link>
               <Link href="/about#standards">Editorial</Link>
+              <Link href="/privacy">Privacy</Link>
               <Link href="/unsubscribe">Unsubscribe</Link>
             </div>
           </nav>
@@ -116,9 +118,9 @@ export default function SiteFooter() {
             B2B Marketing
           </span>
           <div className="foot-legal">
-            <Link href="/about#standards">Privacy</Link>
-            <Link href="/about#standards">Terms</Link>
-            <Link href="/about#standards">Cookies</Link>
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/privacy#cookies">Cookies</Link>
+            <CookiePreferencesTrigger className="foot-cookie-prefs" />
             <Link href="/unsubscribe">Unsubscribe</Link>
           </div>
         </div>

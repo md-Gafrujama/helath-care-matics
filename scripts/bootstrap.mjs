@@ -86,7 +86,7 @@ const supabase = createClient(url, key, {
 });
 
 async function main() {
-  console.log("HRmatics bootstrap\n");
+  console.log("HealthMatics bootstrap\n");
 
   const { error: ping } = await supabase.from("topics").select("id").limit(1);
   if (ping) {
