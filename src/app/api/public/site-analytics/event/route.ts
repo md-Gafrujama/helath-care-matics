@@ -1,19 +1,17 @@
 import { after } from "next/server";
 import { NextResponse } from "next/server";
-import {
-  persistSiteAnalyticsRow,
-  prepareSiteAnalyticsEvent,
-} from "@/lib/site-analytics/ingest";
+import { prepareSiteAnalyticsEvent } from "@/lib/site-analytics/prepare";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 /**
- * Respond in ~few ms after validation; DB write continues via after().
- * Client uses sendBeacon — does not wait for insert RTT.
+ * Hot path: validate only, return 204 immediately.
+ * DB insert runs in after() via dynamic import (no Supabase on critical path).
+ * Target: ~sub-60ms response once the isolate is warm.
  */
 export async function POST(request: Request) {
-  let body: Record<string, unknown> = {};
+  let body: Record<string, unknown>;
   try {
     body = (await request.json()) as Record<string, unknown>;
   } catch {
@@ -28,12 +26,18 @@ export async function POST(request: Request) {
     );
   }
 
-  after(() => persistSiteAnalyticsRow(prepared));
+  after(async () => {
+    const { persistSiteAnalyticsRow } = await import(
+      "@/lib/site-analytics/persist"
+    );
+    await persistSiteAnalyticsRow(prepared);
+  });
 
   return new NextResponse(null, {
     status: 204,
     headers: {
       "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
     },
   });
 }
