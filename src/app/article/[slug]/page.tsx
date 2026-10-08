@@ -228,28 +228,6 @@ export default async function ArticlePage({
                     sizes="(min-width: 1000px) 720px, 100vw"
                   />
                 </div>
-                {(article.cover_image_credit || article.cover_image_alt) && (
-                  <figcaption className="art-cover-credit">
-                    {article.cover_image_credit ? (
-                      article.cover_image_credit_url ? (
-                        <>
-                          Photo:{" "}
-                          <a
-                            href={article.cover_image_credit_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {article.cover_image_credit}
-                          </a>
-                        </>
-                      ) : (
-                        <>Photo: {article.cover_image_credit}</>
-                      )
-                    ) : (
-                      article.cover_image_alt
-                    )}
-                  </figcaption>
-                )}
               </figure>
 
               <div className="art-body-wrap">
