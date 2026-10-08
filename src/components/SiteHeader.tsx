@@ -2,6 +2,7 @@ import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
 import BrandLogo from "@/components/BrandLogo";
 import MobileNav from "@/components/MobileNav";
+import SubscribeButton from "@/components/SubscribeButton";
 
 function todayLabel() {
   return new Intl.DateTimeFormat("en-US", {
@@ -43,9 +44,9 @@ export default function SiteHeader({
           </nav>
           <div className="masthead-right">
             <SearchBar />
-            <Link href="/#nl" className="btn btn-primary subscribe-top">
+            <SubscribeButton className="btn btn-primary subscribe-top">
               <span className="label">Subscribe</span>
-            </Link>
+            </SubscribeButton>
             <MobileNav currentTopicSlug={currentTopicSlug} />
           </div>
         </div>

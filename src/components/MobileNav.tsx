@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import BrandLogo from "@/components/BrandLogo";
+import SubscribeButton from "@/components/SubscribeButton";
 import { HR_TOPICS } from "@/lib/topic-config";
 
 export default function MobileNav({
@@ -83,14 +84,13 @@ export default function MobileNav({
               ))}
 
               <div style={{ marginTop: 20 }}>
-                <Link
-                  href="/#nl"
+                <SubscribeButton
                   className="btn btn-primary"
                   style={{ width: "100%", justifyContent: "center" }}
                   onClick={close}
                 >
                   Subscribe free
-                </Link>
+                </SubscribeButton>
               </div>
             </div>
           </div>,
