@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatPublishedDate } from "@/lib/format-date";
 import { storyHref } from "@/lib/story-link";
 import type { TopicStory } from "@/lib/topic-stories";
 
@@ -15,7 +16,12 @@ export default function HomeBrief({ stories }: { stories: TopicStory[] }) {
         <ol className="hr-brief-list">
           {stories.map((story) => (
             <li className="hr-brief-item" key={story.id}>
-              <span className="hr-brief-tag">{story.topicName}</span>
+              <span className="hr-brief-tag">
+                {story.topicName}
+                {story.publishedAt
+                  ? ` · ${formatPublishedDate(story.publishedAt)}`
+                  : ""}
+              </span>
               <h3>
                 <Link href={storyHref(story)}>{story.title}</Link>
               </h3>

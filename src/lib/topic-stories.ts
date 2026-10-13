@@ -14,6 +14,7 @@ export type TopicStory = {
   trending?: boolean;
   coverImageUrl: string | null;
   coverImageAlt: string | null;
+  publishedAt: string | null;
 };
 
 export function articleToStory(article: ArticleWithTopic): TopicStory {
@@ -29,6 +30,7 @@ export function articleToStory(article: ArticleWithTopic): TopicStory {
     topicName: article.topic?.name ?? "",
     coverImageUrl: article.cover_image_url,
     coverImageAlt: article.cover_image_alt,
+    publishedAt: article.published_at,
   };
 }
 

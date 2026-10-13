@@ -50,7 +50,7 @@ export default function SiteFooter() {
             </p>
             <div className="foot-socials">
               <a
-                href="https://www.linkedin.com"
+                href="https://www.linkedin.com/showcase/healthmatics-healthcare-intelligence/posts/"
                 aria-label="LinkedIn"
                 rel="noopener noreferrer"
                 target="_blank"

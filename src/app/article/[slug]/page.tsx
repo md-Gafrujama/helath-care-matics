@@ -8,6 +8,7 @@ import CoverImage from "@/components/CoverImage";
 import JsonLd from "@/components/JsonLd";
 import ArticleSidebar from "@/components/article/ArticleSidebar";
 import ArticleRelated from "@/components/article/ArticleRelated";
+import ArticleLinkedIn from "@/components/article/ArticleLinkedIn";
 import SubscribePopup from "@/components/SubscribePopup";
 import { getArticleToc } from "@/lib/article-toc";
 import {
@@ -15,7 +16,8 @@ import {
   getArticlesByTopicSlug,
 } from "@/lib/articles";
 import { parseKeywordList, hydrateArticleSeo } from "@/lib/seo";
-import { getSiteUrl } from "@/lib/site";
+import { formatPublishedDate } from "@/lib/format-date";
+import { PRODUCTION_SITE_URL, getSiteUrl } from "@/lib/site";
 
 export const revalidate = 300;
 
@@ -75,15 +77,6 @@ export async function generateMetadata({
   };
 }
 
-function formatDateLong(iso: string | null) {
-  if (!iso) return "";
-  return new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  }).format(new Date(iso));
-}
-
 export default async function ArticlePage({
   params,
 }: {
@@ -101,6 +94,10 @@ export default async function ArticlePage({
 
   const moreInTopic = related.slice(0, 4);
   const siteUrl = getSiteUrl();
+  const articleUrl = `${siteUrl}/article/${article.slug}`;
+  const shareUrl = `${PRODUCTION_SITE_URL}/article/${article.slug}`;
+  const publishedIso = article.published_at ?? article.updated_at;
+  const publishedLabel = formatPublishedDate(publishedIso, "long");
   const seo = hydrateArticleSeo(article, article.topic?.name);
   const topicSlug = article.topic?.slug ?? "";
   const toc = getArticleToc(article.body_json);
@@ -204,9 +201,11 @@ export default async function ArticlePage({
                     <div className="art-author-copy">
                       <strong className="art-author-name">{article.author_name}</strong>
                       <div className="art-author-meta">
-                        <time dateTime={article.published_at ?? undefined}>
-                          {formatDateLong(article.published_at)}
-                        </time>
+                        {publishedLabel && (
+                          <time dateTime={publishedIso ?? undefined}>
+                            Published {publishedLabel}
+                          </time>
+                        )}
                         <span className="art-dot" aria-hidden>
                           ·
                         </span>
@@ -214,6 +213,7 @@ export default async function ArticlePage({
                       </div>
                     </div>
                   </div>
+                  <ArticleLinkedIn url={shareUrl} />
                 </div>
               </header>
 
@@ -232,6 +232,16 @@ export default async function ArticlePage({
 
               <div className="art-body-wrap">
                 <ArticleBody body={article.body_json} />
+              </div>
+
+              <div className="art-share">
+                {publishedLabel && (
+                  <p className="art-share-date">
+                    Published{" "}
+                    <time dateTime={publishedIso ?? undefined}>{publishedLabel}</time>
+                  </p>
+                )}
+                <ArticleLinkedIn url={shareUrl} />
               </div>
 
               {article.topic && (
