@@ -8,7 +8,7 @@ import CoverImage from "@/components/CoverImage";
 import JsonLd from "@/components/JsonLd";
 import ArticleSidebar from "@/components/article/ArticleSidebar";
 import ArticleRelated from "@/components/article/ArticleRelated";
-import ArticleLinkedIn from "@/components/article/ArticleLinkedIn";
+import ArticleShareActions from "@/components/article/ArticleShareActions";
 import SubscribePopup from "@/components/SubscribePopup";
 import { getArticleToc } from "@/lib/article-toc";
 import {
@@ -213,7 +213,7 @@ export default async function ArticlePage({
                       </div>
                     </div>
                   </div>
-                  <ArticleLinkedIn url={shareUrl} />
+                  <ArticleShareActions url={shareUrl} title={article.title} />
                 </div>
               </header>
 
@@ -241,7 +241,7 @@ export default async function ArticlePage({
                     <time dateTime={publishedIso ?? undefined}>{publishedLabel}</time>
                   </p>
                 )}
-                <ArticleLinkedIn url={shareUrl} />
+                <ArticleShareActions url={shareUrl} title={article.title} />
               </div>
 
               {article.topic && (
