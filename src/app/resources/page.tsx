@@ -2,184 +2,129 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import ResourceCard from "@/components/resources/ResourceCard";
+import ResourcesHero from "@/components/resources/ResourcesHero";
+import ResourcesNav from "@/components/resources/ResourcesNav";
+import {
+  RESOURCE_CATEGORY_META,
+  RESOURCE_NAV,
+  type ResourceCategory,
+} from "@/lib/resources/constants";
+import { listPublishedResources } from "@/lib/resources/queries";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Resource Library - HealthMatics",
+  title: "Resources — HealthMatics",
   description:
-    "Whitepapers, research reports, webinars, and playbooks for healthcare leaders. Free with registration.",
+    "White papers, reports, case studies, guides, and webinars for healthcare decision makers.",
 };
 
-const RESOURCES = [
-  {
-    type: "Whitepaper",
-    title: "A practical guide to multi-state employment compliance",
-    dek: "How healthcare teams sequence policy updates, manager training, and audit trails when rules differ by location.",
-    spon: "HealthMatics Research",
-  },
-  {
-    type: "Report",
-    title: "2026 Healthcare AI benchmark",
-    dek: "Where people leaders are allocating budget, headcount, and technology this year.",
-    spon: "HealthMatics Research",
-  },
-  {
-    type: "Webinar",
-    title: "Building an AI-ready people function",
-    dek: "On-demand session on data readiness, governance, and where to start with healthcare AI.",
-    spon: "On demand · 45 min",
-  },
-  {
-    type: "Infographic",
-    title: "The state of total rewards technology",
-    dek: "Key data points on benefits modernization, pay transparency, and manager tooling.",
-    spon: "HealthMatics Research",
-  },
-  {
-    type: "Report",
-    title: "Talent acquisition benchmarks: from requisition to offer",
-    dek: "How recruiting teams are restructuring cycles, SLAs, and hiring manager partnership.",
-    spon: "HealthMatics Research",
-  },
-  {
-    type: "Whitepaper",
-    title: "A practical framework for healthcare data governance",
-    dek: "What a governed people-data layer looks like, and how to build one incrementally.",
-    spon: "HealthMatics Research",
-  },
-] as const;
+const SECTION_COPY: Record<string, string> = {
+  whitepaper: "In-depth briefs for executive and clinical leadership teams.",
+  report: "Data-backed market and operations research you can act on.",
+  case_study: "How peers solved hard healthcare operating problems.",
+  guide: "Practical playbooks operators and clinicians can use the same day.",
+  webinar: "On-demand sessions with practitioners and analysts.",
+};
 
-export default function Page() {
+export default async function ResourcesHubPage() {
+  const all = await listPublishedResources();
+  const counts: Partial<Record<string, number>> = {
+    blogs: undefined,
+    whitepaper: all.filter((r) => r.category === "whitepaper").length,
+    report: all.filter((r) => r.category === "report").length,
+    case_study: all.filter((r) => r.category === "case_study").length,
+    guide: all.filter((r) => r.category === "guide").length,
+    webinar: all.filter((r) => r.category === "webinar").length,
+  };
+
   return (
     <>
       <SiteHeader />
-      <div className="wrap">
-        <div className="thero">
-          <span className="kicker k">Resource Library</span>
-          <h1>Research, guides &amp; tools for healthcare leaders</h1>
-          <p>
-            In-depth reports, playbooks, and on-demand sessions, produced by
-            the HealthMatics editorial studio and our partners. Free with a quick
-            registration.
-          </p>
-        </div>
-      </div>
+      <main className="rs-page">
+        <ResourcesHero
+          variant="hub"
+          countLabel={
+            all.length > 0
+              ? `${all.length} published asset${all.length === 1 ? "" : "s"} · free with registration`
+              : "Free downloads with a work email"
+          }
+        />
 
-      <div className="wrap" style={{ padding: "36px 0 20px" }}>
-        <div className="rgrid">
-          {RESOURCES.map((item) => (
-            <article className="rcard reveal" key={item.title}>
-              <div
-                className="rc-top"
-                style={{
-                  background: "var(--paper-2)",
-                  minHeight: 160,
-                  display: "grid",
-                  placeItems: "center",
-                }}
-              >
-                <span className="rtype">{item.type}</span>
-              </div>
-              <div className="rc-b">
-                <h3>{item.title}</h3>
-                <p>{item.dek}</p>
-                <div className="spon">{item.spon}</div>
-                <a href="#lead" className="btn btn-solid">
-                  Download →
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
+        <div className="wrap rs-body">
+          <ResourcesNav active="hub" counts={counts} />
 
-      <div className="wrap" style={{ padding: "24px 0 56px" }} id="lead">
-        <div className="gate" style={{ gridTemplateColumns: "1fr 1fr" }}>
-          <div className="gate-l">
-            <span className="tg">Free download</span>
-            <h2>Get instant access</h2>
-            <p>
-              Tell us where to send it. Register once to unlock every report,
-              whitepaper, and webinar in the HealthMatics library.
-            </p>
-            <div
-              className="mono"
-              style={{ color: "#9AA0A7", fontSize: "12px", marginTop: "8px" }}
-            >
-              ✓ Free · ✓ Instant access · ✓ Unsubscribe anytime
-            </div>
+          <div className="rs-tiles" aria-label="Browse by type">
+            {RESOURCE_NAV.filter((n) => n.key !== "blogs").map((section) => {
+              const category = (section as { category?: ResourceCategory })
+                .category;
+              const href = section.href;
+              const count = category ? counts[category] ?? 0 : 0;
+              return (
+                <Link key={section.key} href={href} className="rs-tile">
+                  <span className="rs-tile-label">{section.label}</span>
+                  <span className="rs-tile-count">
+                    {count > 0 ? `${count} available` : "Coming soon"}
+                  </span>
+                  <span className="rs-tile-copy">
+                    {(category && SECTION_COPY[category]) ||
+                      SECTION_COPY[section.key] ||
+                      ""}
+                  </span>
+                  <span className="rs-tile-go" aria-hidden>
+                    Explore →
+                  </span>
+                </Link>
+              );
+            })}
           </div>
-          <div
-            className="gate-r"
-            style={{ background: "var(--paper)", display: "block", padding: "30px" }}
-          >
-            <form className="lc js-fake-subscribe" data-source="resources">
-              <div>
-                <label>First name</label>
-                <input type="text" required />
-              </div>
-              <div>
-                <label>Last name</label>
-                <input type="text" required />
-              </div>
-              <div className="full">
-                <label>Work email</label>
-                <input type="email" required />
-              </div>
-              <div>
-                <label>Company</label>
-                <input type="text" required />
-              </div>
-              <div>
-                <label>Job title</label>
-                <input type="text" />
-              </div>
-              <div className="full">
-                <label>Company size</label>
-                <select>
-                  <option>1-50</option>
-                  <option>51-200</option>
-                  <option>201-1,000</option>
-                  <option>1,001-5,000</option>
-                  <option>5,000+</option>
-                </select>
-              </div>
-              <div
-                className="full"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  alignItems: "flex-start",
-                  marginTop: "2px",
-                }}
-              >
-                <input
-                  type="checkbox"
-                  style={{ width: "auto", marginTop: "5px" }}
-                  required
-                />
-                <span style={{ fontSize: "12px", color: "var(--mute)" }}>
-                  I agree to receive the requested content and related
-                  communications from HealthMatics and its partners. I can
-                  unsubscribe anytime. See our Privacy Policy.
-                </span>
-              </div>
-              <div className="full">
-                <button
-                  className="btn btn-solid"
-                  type="submit"
-                  style={{ width: "100%", justifyContent: "center" }}
-                >
-                  Get instant access →
-                </button>
-              </div>
-            </form>
-          </div>
+
+          {RESOURCE_NAV.filter((n) => n.key !== "blogs").map((section) => {
+            const category = (section as { category?: ResourceCategory })
+              .category;
+            if (!category) return null;
+            const items = all.filter((r) => r.category === category);
+            const meta = RESOURCE_CATEGORY_META[category];
+            return (
+              <section key={category} className="rs-section" id={meta.path}>
+                <div className="rs-section-head">
+                  <div>
+                    <h2>{meta.plural}</h2>
+                    <p className="rs-section-dek">
+                      {SECTION_COPY[category] || ""}
+                    </p>
+                  </div>
+                  <Link href={`/resources/${meta.path}`} className="rs-section-link">
+                    View all →
+                  </Link>
+                </div>
+                {items.length === 0 ? (
+                  <div className="rs-empty">
+                    <strong>Coming soon</strong>
+                    <span>New {meta.plural.toLowerCase()} will appear here.</span>
+                  </div>
+                ) : (
+                  <div className="rs-grid">
+                    {items.slice(0, 6).map((item) => (
+                      <ResourceCard
+                        key={item.id}
+                        id={item.id}
+                        title={item.title}
+                        slug={item.slug}
+                        category={item.category}
+                        coverUrl={item.cover_url}
+                        description={item.description}
+                        vertical={item.vertical}
+                      />
+                    ))}
+                  </div>
+                )}
+              </section>
+            );
+          })}
         </div>
-        <p style={{ marginTop: 20, fontSize: 14, color: "var(--mute)" }}>
-          Prefer the newsroom?{" "}
-          <Link href="/topic/playbooks">Browse playbooks →</Link>
-        </p>
-      </div>
+      </main>
       <SiteFooter />
     </>
   );

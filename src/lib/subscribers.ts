@@ -1,6 +1,11 @@
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getMailer, isMailConfigured, mailFrom } from "@/lib/email";
+import {
+  encodeLeadSourceNote,
+  mergeUnsubscribeNote,
+  type LeadSource,
+} from "@/lib/resources/lead-source";
 import { getSiteUrl } from "@/lib/site";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -14,6 +19,11 @@ export type SubscribeInput = {
   topicId?: string | null;
   topicSlug?: string | null;
   topicName?: string | null;
+  sourceType?: string | null;
+  sourceSlug?: string | null;
+  sourceTitle?: string | null;
+  /** When true, mark unsubscribed unless already an active subscriber. */
+  optOut?: boolean;
 };
 
 function normalizeEmail(raw: string): string {
@@ -28,6 +38,55 @@ function escapeHtml(value: string): string {
     .replaceAll('"', "&quot;");
 }
 
+function resolveLeadSource(input: SubscribeInput): LeadSource {
+  if (input.sourceType) {
+    return {
+      type: input.sourceType,
+      slug: input.sourceSlug || input.articleSlug || null,
+      title: input.sourceTitle || input.articleTitle || null,
+    };
+  }
+  if (input.articleSlug || input.articleTitle) {
+    return {
+      type: "blog",
+      slug: input.articleSlug || null,
+      title: input.articleTitle || null,
+    };
+  }
+  return {
+    type: input.source || "site",
+    slug: null,
+    title: null,
+  };
+}
+
+async function applyLeadSourceColumns(
+  admin: ReturnType<typeof createAdminClient>,
+  subscriberId: string,
+  source: LeadSource,
+  fallbackNote: string | null,
+) {
+  const patch = {
+    source_type: source.type,
+    source_slug: source.slug,
+    source_title: source.title,
+  };
+  const { error } = await admin
+    .from("subscribers")
+    .update(patch)
+    .eq("id", subscriberId);
+  if (error && /source_type|source_slug|source_title/i.test(error.message)) {
+    // Columns not migrated yet — keep JSON in unsubscribe_reason only if empty.
+    if (fallbackNote) {
+      await admin
+        .from("subscribers")
+        .update({ unsubscribe_reason: fallbackNote })
+        .eq("id", subscriberId)
+        .is("unsubscribe_reason", null);
+    }
+  }
+}
+
 export async function saveSubscriber(input: SubscribeInput) {
   const email = normalizeEmail(input.email);
   if (!EMAIL_RE.test(email) || email.length > 254) {
@@ -37,29 +96,80 @@ export async function saveSubscriber(input: SubscribeInput) {
   const admin = createAdminClient();
   const { data: existing, error: lookupError } = await admin
     .from("subscribers")
-    .select("id, unsubscribed_at")
+    .select("id, unsubscribed_at, unsubscribe_reason")
     .eq("email", email)
     .maybeSingle();
 
   if (lookupError) throw new Error(lookupError.message);
 
+  const leadSource = resolveLeadSource(input);
+  const sourceNote = encodeLeadSourceNote(leadSource);
+  const wantsOptOut = Boolean(input.optOut);
+  // Never flip an existing active subscriber to unsubscribed via opt-out tick.
+  const alreadySubscribed = Boolean(existing?.id && !existing.unsubscribed_at);
+
   let subscriberId = existing?.id;
   if (!subscriberId) {
-    const { data: inserted, error: insertError } = await admin
+    let { data: inserted, error: insertError } = await admin
       .from("subscribers")
-      .insert({ email })
+      .insert({
+        email,
+        unsubscribed_at: wantsOptOut ? new Date().toISOString() : null,
+        unsubscribe_reason: sourceNote,
+        source_type: leadSource.type,
+        source_slug: leadSource.slug,
+        source_title: leadSource.title,
+      } as {
+        email: string;
+        unsubscribed_at?: string | null;
+        unsubscribe_reason?: string | null;
+        source_type?: string | null;
+        source_slug?: string | null;
+        source_title?: string | null;
+      })
       .select("id")
       .single();
+    if (insertError && /source_type|source_slug|source_title/i.test(insertError.message)) {
+      const retry = await admin
+        .from("subscribers")
+        .insert({
+          email,
+          unsubscribed_at: wantsOptOut ? new Date().toISOString() : null,
+          unsubscribe_reason: sourceNote,
+        })
+        .select("id")
+        .single();
+      inserted = retry.data;
+      insertError = retry.error;
+    }
     if (insertError || !inserted) {
       throw new Error(insertError?.message ?? "Could not save subscriber");
     }
     subscriberId = inserted.id;
+  } else if (wantsOptOut) {
+    if (!alreadySubscribed) {
+      const { error } = await admin
+        .from("subscribers")
+        .update({
+          unsubscribed_at: new Date().toISOString(),
+          unsubscribe_reason: mergeUnsubscribeNote(
+            existing?.unsubscribe_reason,
+            null,
+          ),
+        })
+        .eq("id", subscriberId);
+      if (error) throw new Error(error.message);
+    }
+    await applyLeadSourceColumns(admin, subscriberId, leadSource, sourceNote);
   } else if (existing?.unsubscribed_at) {
     const { error } = await admin
       .from("subscribers")
       .update({ unsubscribed_at: null })
       .eq("id", subscriberId);
     if (error) throw new Error(error.message);
+    await applyLeadSourceColumns(admin, subscriberId, leadSource, sourceNote);
+  } else {
+    await applyLeadSourceColumns(admin, subscriberId, leadSource, sourceNote);
   }
 
   const articleId = input.articleId || null;
@@ -67,12 +177,12 @@ export async function saveSubscriber(input: SubscribeInput) {
   const { error: interestError } = await admin.from("subscriber_interests").insert({
     subscriber_id: subscriberId,
     article_id: articleId,
-    article_slug: input.articleSlug || null,
-    article_title: input.articleTitle || null,
+    article_slug: input.articleSlug || leadSource.slug,
+    article_title: input.articleTitle || leadSource.title,
     topic_id: topicId,
     topic_slug: input.topicSlug || null,
     topic_name: input.topicName || null,
-    source: input.source || "site",
+    source: input.source || leadSource.type || "site",
   });
 
   if (interestError && interestError.code !== "23505") {
@@ -116,7 +226,7 @@ export async function unsubscribeByEmail(
   const admin = createAdminClient();
   const { data: existing, error: lookupError } = await admin
     .from("subscribers")
-    .select("id, unsubscribed_at")
+    .select("id, unsubscribed_at, unsubscribe_reason")
     .eq("email", email)
     .maybeSingle();
 
@@ -135,14 +245,17 @@ export async function unsubscribeByEmail(
 
   const unsubscribedAt = new Date().toISOString();
   const trimmedReason = reason?.trim()?.slice(0, 280) || null;
+  const nextNote = trimmedReason
+    ? mergeUnsubscribeNote(existing.unsubscribe_reason, trimmedReason)
+    : existing.unsubscribe_reason;
 
   let { error } = await admin
     .from("subscribers")
     .update(
-      trimmedReason
+      nextNote
         ? {
             unsubscribed_at: unsubscribedAt,
-            unsubscribe_reason: trimmedReason,
+            unsubscribe_reason: nextNote,
           }
         : { unsubscribed_at: unsubscribedAt },
     )

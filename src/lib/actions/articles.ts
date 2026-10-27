@@ -139,6 +139,7 @@ export async function createArticle(formData: FormData) {
   }
 
   revalidatePath("/");
+  revalidatePath("/blogs");
   revalidatePath("/admin/articles");
   revalidateSitemap();
   if (inserted?.status === "published" && inserted.id) {
@@ -177,6 +178,7 @@ export async function updateArticle(id: string, formData: FormData) {
   }
 
   revalidatePath("/");
+  revalidatePath("/blogs");
   revalidatePath("/admin/articles");
   if (existing?.slug) revalidatePath(`/article/${existing.slug}`);
   if (slug !== existing?.slug) revalidatePath(`/article/${slug}`);
@@ -199,6 +201,7 @@ export async function deleteArticle(id: string) {
   if (error) throw new Error(error.message);
 
   revalidatePath("/");
+  revalidatePath("/blogs");
   revalidatePath("/admin/articles");
   if (existing?.slug) revalidatePath(`/article/${existing.slug}`);
   revalidateSitemap();
@@ -223,6 +226,7 @@ export async function toggleArticleStatus(id: string, next: ArticleStatus) {
   if (error) throw new Error(error.message);
 
   revalidatePath("/");
+  revalidatePath("/blogs");
   revalidatePath("/admin/articles");
   if (existing?.slug) revalidatePath(`/article/${existing.slug}`);
   revalidateSitemap();

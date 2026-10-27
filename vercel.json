@@ -3,7 +3,7 @@
   "crons": [
     {
       "path": "/api/cron/generate-article",
-      "schedule": "50 15 * * *"
+      "schedule": "50 15 * * 4,5"
     },
     {
       "path": "/api/cron/cleanup-analytics",

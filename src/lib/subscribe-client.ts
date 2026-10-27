@@ -9,6 +9,10 @@ export type SubscribePayload = {
   topicId?: string | null;
   topicSlug?: string | null;
   topicName?: string | null;
+  sourceType?: string | null;
+  sourceSlug?: string | null;
+  sourceTitle?: string | null;
+  pathname?: string | null;
 };
 
 export async function submitSubscribe(payload: SubscribePayload) {

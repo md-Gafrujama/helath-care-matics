@@ -41,7 +41,7 @@ Admin: `/admin/login`
 
 ### Cron
 
-`vercel.json` schedules `/api/cron/generate-article` daily at **15:50 UTC** (9:20 PM IST).  
+`vercel.json` schedules `/api/cron/generate-article` on **Thursday and Friday** at **15:50 UTC** (9:20 PM IST).  
 Ensure `CRON_SECRET` is set in Vercel env so the job is authorized.
 
 ### Scripts

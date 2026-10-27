@@ -18,8 +18,8 @@ export default function HomeLatestGrid({
           <div className="marker">
             <h2>Latest News</h2>
           </div>
-          <Link href="/#topics" className="see-all">
-            See all topics
+          <Link href="/blogs" className="see-all">
+            All blogs
           </Link>
         </header>
         <div className="hr-story-grid">

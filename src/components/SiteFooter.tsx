@@ -85,10 +85,12 @@ export default function SiteFooter() {
           <nav className="foot-nav" aria-label="Footer">
             <div className="foot-col">
               <h4>Explore</h4>
-              <Link href="/#latest">News</Link>
-              <Link href="/#analysis">Analysis</Link>
-              <Link href="/#research">Research</Link>
-              <Link href="/resources">Resources</Link>
+              <Link href="/blogs">Blogs</Link>
+              <Link href="/resources/white-papers">White papers</Link>
+              <Link href="/resources/reports">Reports</Link>
+              <Link href="/resources/case-studies">Case studies</Link>
+              <Link href="/resources/guides">Guides</Link>
+              <Link href="/resources/webinars">Webinars</Link>
             </div>
 
             <div className="foot-col">

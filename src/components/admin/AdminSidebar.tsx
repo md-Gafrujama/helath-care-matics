@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import BrandLogo from "@/components/BrandLogo";
 import { signOut } from "@/lib/actions/auth";
 
-const LINKS = [
+const ALL_LINKS = [
   {
     href: "/admin",
     label: "Dashboard",
@@ -43,17 +43,6 @@ const LINKS = [
     ),
   },
   {
-    href: "/admin/subscribers",
-    label: "Subscribers",
-    hint: "Newsletter list",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <path d="M4 6h16v12H4z" />
-        <path d="M4 7l8 6 8-6" />
-      </svg>
-    ),
-  },
-  {
     href: "/admin/cookies-report",
     label: "Cookies & visitors",
     hint: "Sessions & attribution",
@@ -79,6 +68,47 @@ const LINKS = [
   },
 ] as const;
 
+const LINKS = ALL_LINKS.slice(0, 3);
+const INSIGHT_LINKS = ALL_LINKS.slice(3);
+
+const AUDIENCE_LINKS = [
+  {
+    href: "/admin/subscribes",
+    label: "Subscribes",
+    hint: "Newsletter opt-ins",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M4 6h16v12H4z" />
+        <path d="M4 7l8 6 8-6" />
+      </svg>
+    ),
+  },
+  {
+    href: "/admin/downloads",
+    label: "Downloads",
+    hint: "Resource leads",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M12 4v11M7.5 10.5L12 15l4.5-4.5" />
+        <path d="M5 19h14" />
+      </svg>
+    ),
+  },
+  {
+    href: "/admin/resources",
+    label: "Resources",
+    hint: "White papers & reports",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M6 3h9l4 4v14H6z" />
+        <path d="M14 3v5h5M9 13h7M9 17h5" />
+      </svg>
+    ),
+  },
+] as const;
+
+type NavLink = (typeof ALL_LINKS)[number] | (typeof AUDIENCE_LINKS)[number];
+
 export default function AdminSidebar({
   email,
   onNavigate,
@@ -89,6 +119,30 @@ export default function AdminSidebar({
   const pathname = usePathname();
   const initial = (email?.[0] ?? "A").toUpperCase();
 
+  function renderLink(link: NavLink) {
+    const active =
+      "exact" in link && link.exact
+        ? pathname === link.href
+        : pathname === link.href || pathname.startsWith(`${link.href}/`);
+    return (
+      <Link
+        key={link.href}
+        href={link.href}
+        className={active ? "active" : undefined}
+        aria-current={active ? "page" : undefined}
+        onClick={onNavigate}
+      >
+        <span className="admin-nav-icon" aria-hidden>
+          {link.icon}
+        </span>
+        <span className="admin-nav-copy">
+          <span className="admin-nav-title">{link.label}</span>
+          <span className="admin-nav-hint">{link.hint}</span>
+        </span>
+      </Link>
+    );
+  }
+
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar-head">
@@ -98,29 +152,13 @@ export default function AdminSidebar({
 
       <nav className="admin-sidebar-nav" aria-label="Admin">
         <p className="admin-nav-label">Manage</p>
-        {LINKS.map((link) => {
-          const active =
-            "exact" in link && link.exact
-              ? pathname === link.href
-              : pathname === link.href || pathname.startsWith(`${link.href}/`);
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={active ? "active" : undefined}
-              aria-current={active ? "page" : undefined}
-              onClick={onNavigate}
-            >
-              <span className="admin-nav-icon" aria-hidden>
-                {link.icon}
-              </span>
-              <span className="admin-nav-copy">
-                <span className="admin-nav-title">{link.label}</span>
-                <span className="admin-nav-hint">{link.hint}</span>
-              </span>
-            </Link>
-          );
-        })}
+        {LINKS.map(renderLink)}
+
+        <p className="admin-nav-label">Audience</p>
+        {AUDIENCE_LINKS.map(renderLink)}
+
+        <p className="admin-nav-label">Insights</p>
+        {INSIGHT_LINKS.map(renderLink)}
 
         <p className="admin-nav-label">Shortcuts</p>
         <Link href="/admin/articles/new#generate" onClick={onNavigate}>

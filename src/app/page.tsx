@@ -4,6 +4,7 @@ import SiteFooter from "@/components/SiteFooter";
 import HomeHero from "@/components/home/HomeHero";
 import HomeLatestGrid from "@/components/home/HomeLatestGrid";
 import HomeBrief from "@/components/home/HomeBrief";
+import HomeResearch from "@/components/home/HomeResearch";
 import HomeTopicSection from "@/components/home/HomeTopicSection";
 import { getHomePageData } from "@/lib/home-data";
 
@@ -117,81 +118,7 @@ export default async function Page() {
           </div>
         </section>
 
-        {/* ============ RESEARCH LIBRARY ============ */}
-        <section className="section wrap" id="research">
-          <div className="section-head">
-            <div className="marker"><h2>Research &amp; Intelligence</h2></div>
-            <a href="#" className="see-all">Research library</a>
-          </div>
-          <div className="research-grid">
-            <article className="research-card">
-              <div className="art research-cover">
-                <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-                  <rect width="400" height="240" fill="#0A2E27" />
-                  <g stroke="#14463B"><path d="M0 80H400M0 160H400M133 0V240M266 0V240" /></g>
-                  <path d="M20 190 100 140 180 160 260 90 340 110" fill="none" stroke="#B0842B" strokeWidth="3.5" />
-                  <g fill="#B0842B"><circle cx="180" cy="160" r="6" /><circle cx="340" cy="110" r="6" /></g>
-                </svg>
-                <span className="research-gate">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V7a4 4 0 018 0v3" /></svg>
-                  Gated report
-                </span>
-              </div>
-              <div className="research-body">
-                <div className="rtype">Benchmark Report</div>
-                <h3><a href="#" className="headline-link">Healthcare AI Market Outlook 2026</a></h3>
-                <p>Where health systems are investing, what is moving to production, and how leaders are structuring governance.</p>
-                <div className="research-foot">
-                  <span className="rdate">Placeholder edition</span>
-                  <a href="#" className="btn btn-gold">Download</a>
-                </div>
-              </div>
-            </article>
-            <article className="research-card">
-              <div className="art research-cover">
-                <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-                  <rect width="400" height="240" fill="#123A54" />
-                  <g fill="#1C4E6E"><rect x="40" y="150" width="34" height="70" /><rect x="94" y="120" width="34" height="100" /><rect x="148" y="130" width="34" height="90" /><rect x="202" y="90" width="34" height="130" /><rect x="256" y="110" width="34" height="110" /><rect x="310" y="70" width="34" height="150" /></g>
-                </svg>
-                <span className="research-gate">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V7a4 4 0 018 0v3" /></svg>
-                  Gated report
-                </span>
-              </div>
-              <div className="research-body">
-                <div className="rtype">Buyer Guide</div>
-                <h3><a href="#" className="headline-link">Hospital Technology Buyer Guide 2026</a></h3>
-                <p>An evaluation framework for platform selection across EHR adjacent, analytics and security categories.</p>
-                <div className="research-foot">
-                  <span className="rdate">Placeholder edition</span>
-                  <a href="#" className="btn btn-gold">Download</a>
-                </div>
-              </div>
-            </article>
-            <article className="research-card">
-              <div className="art research-cover">
-                <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-                  <rect width="400" height="240" fill="#0C5245" />
-                  <g fill="none" stroke="#0A3E34"><circle cx="200" cy="120" r="40" /><circle cx="200" cy="120" r="72" /><circle cx="200" cy="120" r="104" /></g>
-                  <g fill="#7FCBB8"><circle cx="240" cy="92" r="6" /><circle cx="152" cy="150" r="6" /></g>
-                </svg>
-                <span className="research-gate">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V7a4 4 0 018 0v3" /></svg>
-                  Gated report
-                </span>
-              </div>
-              <div className="research-body">
-                <div className="rtype">White Paper</div>
-                <h3><a href="#" className="headline-link">Digital Health Outlook 2026</a></h3>
-                <p>How virtual care, remote monitoring and patient engagement are consolidating into integrated platforms.</p>
-                <div className="research-foot">
-                  <span className="rdate">Placeholder edition</span>
-                  <a href="#" className="btn btn-gold">Download</a>
-                </div>
-              </div>
-            </article>
-          </div>
-        </section>
+        <HomeResearch />
 
         {/* ============ NEWSLETTER CTA ============ */}
         <section className="hr-news" id="nl">

@@ -118,6 +118,7 @@ export async function persistGeneratedArticle(
   }
 
   revalidatePath("/");
+  revalidatePath("/blogs");
   revalidatePath("/admin");
   revalidatePath("/admin/articles");
   revalidatePath(`/topic/${args.topic.slug}`);

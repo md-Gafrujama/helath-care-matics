@@ -2,6 +2,7 @@ import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
 import BrandLogo from "@/components/BrandLogo";
 import MobileNav from "@/components/MobileNav";
+import ResourcesDropdown from "@/components/ResourcesDropdown";
 import SubscribeButton from "@/components/SubscribeButton";
 
 function todayLabel() {
@@ -22,7 +23,7 @@ export default function SiteHeader({
       <div className="utility">
         <div className="wrap">
           <nav className="utility-links" aria-label="Utility">
-            <Link href="/#latest">Latest News</Link>
+            <Link href="/blogs">Latest News</Link>
             <Link href="/#nl">Newsletters</Link>
             <Link href="/#research">Research</Link>
             <Link href="/#advertise">Advertise</Link>
@@ -37,10 +38,10 @@ export default function SiteHeader({
         <div className="wrap">
           <BrandLogo />
           <nav className="nav" aria-label="Primary">
-            <Link href="/#latest">News</Link>
+            <Link href="/blogs">News</Link>
             <Link href="/#analysis">Analysis</Link>
             <Link href="/#research">Research</Link>
-            <Link href="/resources">Resources</Link>
+            <ResourcesDropdown />
           </nav>
           <div className="masthead-right">
             <SearchBar />

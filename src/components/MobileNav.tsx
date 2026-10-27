@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import BrandLogo from "@/components/BrandLogo";
 import SubscribeButton from "@/components/SubscribeButton";
+import { RESOURCE_NAV } from "@/lib/resources/constants";
 import { HR_TOPICS } from "@/lib/topic-config";
 
 export default function MobileNav({
@@ -52,7 +53,7 @@ export default function MobileNav({
                   </svg>
                 </button>
               </div>
-              <Link href="/#latest" onClick={close}>
+              <Link href="/blogs" onClick={close}>
                 News
               </Link>
               <Link href="/#analysis" onClick={close}>
@@ -61,9 +62,15 @@ export default function MobileNav({
               <Link href="/#research" onClick={close}>
                 Research
               </Link>
+              <p className="mnav-section-label">Resources</p>
               <Link href="/resources" onClick={close}>
-                Resources
+                All resources
               </Link>
+              {RESOURCE_NAV.map((item) => (
+                <Link key={item.key} href={item.href} onClick={close}>
+                  {item.label}
+                </Link>
+              ))}
               <Link href="/#nl" onClick={close}>
                 Newsletters
               </Link>

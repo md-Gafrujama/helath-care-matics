@@ -83,7 +83,52 @@ export type Subscriber = {
   unsubscribed_at: string | null;
   unsubscribe_token: string;
   unsubscribe_reason?: string | null;
+  source_type?: string | null;
+  source_slug?: string | null;
+  source_title?: string | null;
   created_at: string;
+};
+
+export type ResourceStatus = "draft" | "published";
+export type ResourceCategory =
+  | "whitepaper"
+  | "report"
+  | "case_study"
+  | "guide"
+  | "webinar";
+
+export type Resource = {
+  id: string;
+  title: string;
+  description: string;
+  category: ResourceCategory;
+  vertical: string;
+  slug: string;
+  seo: Record<string, unknown>;
+  overview: string | null;
+  pdf_path: string | null;
+  pdf_url: string | null;
+  cover_path: string | null;
+  cover_url: string | null;
+  form_config: Record<string, unknown>;
+  offered_by: string;
+  author_name: string | null;
+  status: ResourceStatus;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ResourceDownload = {
+  id: string;
+  resource_id: string;
+  email: string;
+  fields: Record<string, unknown>;
+  answers: Record<string, unknown>;
+  profile_completed: boolean;
+  marketing_consent: boolean;
+  created_at: string;
+  updated_at: string;
 };
 
 export type SubscriberInterest = {
@@ -260,6 +305,35 @@ export type Database = {
         };
         Update: Partial<SiteAnalyticsEvent>;
         Relationships: never[];
+      };
+      resources: {
+        Row: Resource;
+        Insert: Partial<Resource> & {
+          title: string;
+          description: string;
+          category: ResourceCategory;
+          vertical: string;
+          slug: string;
+        };
+        Update: Partial<Resource>;
+        Relationships: never[];
+      };
+      resource_downloads: {
+        Row: ResourceDownload;
+        Insert: Partial<ResourceDownload> & {
+          resource_id: string;
+          email: string;
+        };
+        Update: Partial<ResourceDownload>;
+        Relationships: [
+          {
+            foreignKeyName: "resource_downloads_resource_id_fkey";
+            columns: ["resource_id"];
+            isOneToOne: false;
+            referencedRelation: "resources";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
   };
