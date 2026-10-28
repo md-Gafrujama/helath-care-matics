@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import BrandLogo from "@/components/BrandLogo";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import StoryCard from "@/components/StoryCard";
@@ -51,14 +52,11 @@ export default async function BlogsLibraryPage({
               </nav>
 
               <div className="blogs-brand-row">
-                <p className="blogs-brand">
-                  <span className="blogs-brand-mark" aria-hidden>
-                    H
-                  </span>
-                  <span className="blogs-brand-name">
-                    Health<em>Matics</em>
-                  </span>
-                </p>
+                <BrandLogo
+                  href="/"
+                  variant="onDark"
+                  className="blogs-brand"
+                />
                 <span className="blogs-kicker">
                   {activeTopic ? activeTopic.kicker : "Blog library"}
                 </span>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BrandLogo from "@/components/BrandLogo";
 import { SITE_NAME, type ResourceCategory } from "@/lib/resources/constants";
 
 export type ResourcesHeroVariant =
@@ -104,11 +105,28 @@ function HeroVisual({ variant }: { variant: ResourcesHeroVariant }) {
             <div className="rs-hero-sheet rs-hero-sheet--c" />
             <div className="rs-hero-sheet rs-hero-sheet--a" />
             <div className="rs-hero-sheet rs-hero-sheet--b" />
-            {kind === "hub" ? <div className="rs-hero-mark">{SITE_NAME.slice(0, 1)}</div> : null}
+            {kind === "hub" ? (
+              <div className="rs-hero-mark">{SITE_NAME.slice(0, 1)}</div>
+            ) : null}
           </>
         )}
       </div>
     </div>
+  );
+}
+
+function HeroCta({ href, label }: { href: string; label: string }) {
+  if (href.startsWith("#") || href.startsWith("/")) {
+    return (
+      <Link href={href} className="rs-hero-cta">
+        {label}
+      </Link>
+    );
+  }
+  return (
+    <a href={href} className="rs-hero-cta">
+      {label}
+    </a>
   );
 }
 
@@ -146,22 +164,31 @@ export default function ResourcesHero({
             <nav className="rs-hero-crumbs" aria-label="Breadcrumb">
               {crumbs.map((c, i) => (
                 <span key={`${c.label}-${i}`} className="rs-hero-crumb">
-                  {i > 0 ? <span className="rs-hero-crumb-sep" aria-hidden>/</span> : null}
-                  {c.href ? <Link href={c.href}>{c.label}</Link> : <span>{c.label}</span>}
+                  {i > 0 ? (
+                    <span className="rs-hero-crumb-sep" aria-hidden>
+                      /
+                    </span>
+                  ) : null}
+                  {c.href ? (
+                    <Link href={c.href}>{c.label}</Link>
+                  ) : (
+                    <span>{c.label}</span>
+                  )}
                 </span>
               ))}
             </nav>
           ) : null}
 
-          <p className="rs-hero-brand">
-            <span className="rs-hero-brand-mark" aria-hidden>
-              {SITE_NAME.slice(0, 1)}
-            </span>
-            <span className="rs-hero-brand-name">
-              {SITE_NAME.slice(0, 6)}
-              <em>{SITE_NAME.slice(6)}</em>
-            </span>
-          </p>
+          <div className="rs-hero-identity">
+            <BrandLogo
+              href="/"
+              variant="onDark"
+              className="rs-hero-brand"
+            />
+            {!isDetail ? (
+              <p className="rs-hero-kicker">{copy!.kicker}</p>
+            ) : null}
+          </div>
 
           {isDetail ? (
             <>
@@ -170,29 +197,18 @@ export default function ResourcesHero({
               {countLabel ? <p className="rs-hero-meta">{countLabel}</p> : null}
               {href && label ? (
                 <div className="rs-hero-actions">
-                  <a href={href} className="rs-hero-cta">
-                    {label}
-                  </a>
+                  <HeroCta href={href} label={label} />
                 </div>
               ) : null}
             </>
           ) : (
             <>
-              <span className="rs-hero-kicker">{copy!.kicker}</span>
               <h1>{copy!.headline}</h1>
               <p className="rs-hero-dek">{copy!.dek}</p>
               {countLabel ? <p className="rs-hero-meta">{countLabel}</p> : null}
               {href && label ? (
                 <div className="rs-hero-actions">
-                  {href.startsWith("#") || href.startsWith("/") ? (
-                    <Link href={href} className="rs-hero-cta">
-                      {label}
-                    </Link>
-                  ) : (
-                    <a href={href} className="rs-hero-cta">
-                      {label}
-                    </a>
-                  )}
+                  <HeroCta href={href} label={label} />
                 </div>
               ) : null}
             </>
