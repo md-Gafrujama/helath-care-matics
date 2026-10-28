@@ -119,7 +119,7 @@ export default function PrivacyPage() {
             delete, or restrict certain processing, and to object to marketing.
             Use <CookiePreferencesTrigger className="cookie-inline-link" /> to
             update cookie categories. For privacy requests contact{" "}
-            <a href="mailto:editorial@healthmatics.com">editorial@healthmatics.com</a>
+            <a href="mailto:editorial@healthmatics.net">editorial@healthmatics.net</a>
             .
           </p>
 
@@ -128,10 +128,10 @@ export default function PrivacyPage() {
             HealthMatics · Published by Quore B2B Marketing
             <br />
             Privacy:{" "}
-            <a href="mailto:editorial@healthmatics.com">editorial@healthmatics.com</a>
+            <a href="mailto:editorial@healthmatics.net">editorial@healthmatics.net</a>
             <br />
             Partners:{" "}
-            <a href="mailto:partners@healthmatics.com">partners@healthmatics.com</a>
+            <a href="mailto:partners@healthmatics.net">partners@healthmatics.net</a>
           </p>
         </main>
       </div>

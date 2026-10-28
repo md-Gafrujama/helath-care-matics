@@ -58,10 +58,10 @@ export default function Page() {
             <h2 id="contact">Contact</h2>
             <p>
               Editorial:{" "}
-              <a href="mailto:editorial@healthmatics.com">editorial@healthmatics.com</a>
+              <a href="mailto:editorial@healthmatics.net">editorial@healthmatics.net</a>
               <br />
               Advertising &amp; partnerships:{" "}
-              <a href="mailto:partners@healthmatics.com">partners@healthmatics.com</a>
+              <a href="mailto:partners@healthmatics.net">partners@healthmatics.net</a>
             </p>
           </main>
           <aside className="side">
@@ -91,7 +91,7 @@ export default function Page() {
               <h4 style={{ fontSize: 17, marginBottom: 6 }}>Advertise with HealthMatics</h4>
               <p style={{ fontSize: 14, color: "var(--ink-soft)", marginBottom: 12 }}>Reach healthcare leaders actively evaluating solutions.</p>
               <a
-                href="mailto:partners@healthmatics.com"
+                href="mailto:partners@healthmatics.net"
                 className="btn btn-ghost"
               >
                 Get in touch →

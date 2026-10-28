@@ -32,6 +32,6 @@ export function getMailer(): Transporter | null {
 export function mailFrom(): string {
   return (
     process.env.SMTP_FROM ||
-    `HealthMatics <${process.env.SMTP_USER ?? "editorial@healthmatics.com"}>`
+    `HealthMatics <${process.env.SMTP_USER ?? "editorial@healthmatics.net"}>`
   );
 }

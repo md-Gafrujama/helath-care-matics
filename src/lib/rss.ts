@@ -159,8 +159,8 @@ export async function buildRssXml(): Promise<string> {
     <lastBuildDate>${toRfc822(lastBuild)}</lastBuildDate>
     <atom:link href="${escapeXml(`${site}/feed.xml`)}" rel="self" type="application/rss+xml" />
     <copyright>© ${new Date().getUTCFullYear()} HealthMatics. Published by Quore B2B Marketing.</copyright>
-    <managingEditor>editorial@healthmatics.com (The HealthMatics Desk)</managingEditor>
-    <webMaster>editorial@healthmatics.com (The HealthMatics Desk)</webMaster>
+    <managingEditor>editorial@healthmatics.net (The HealthMatics Desk)</managingEditor>
+    <webMaster>editorial@healthmatics.net (The HealthMatics Desk)</webMaster>
 ${items}
   </channel>
 </rss>
